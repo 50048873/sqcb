@@ -1,0 +1,138 @@
+/* 全局工具类 */
+
+@import 'variable.less';
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: ' ';
+    display: table;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+.show {
+	display: block;
+}
+.hide { 
+	display: none;
+}
+.hidden { 
+	visibility: hidden;
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ellipsis-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.extend-click {
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    bottom: -10px;
+    left: -10px;
+  }
+}
+
+.line-top {
+	position: relative;
+	&:before { 
+		content: " ";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    border-top: 1px solid;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    color: #d9dbda;
+	}
+}
+
+.line-bottom {
+    position: relative;
+    &:after { 
+  		content: " ";
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      height: 1px;
+      border-bottom: 1px solid;
+      -webkit-transform-origin: 0 100%;
+      transform-origin: 0 100%;
+      -webkit-transform: scaleY(0.5);
+      transform: scaleY(0.5);
+      color: #d9dbda;
+    }
+}
+
+.sj-r(@w:12px, @c: red) { 
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  border-width: @w;
+  border-color: transparent transparent transparent @c;
+  border-style: dashed dashed dashed solid;
+}
+
+.sj-l(@w:12px, @c: red) { 
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  border-width: @w;
+  border-color: transparent @c transparent transparent;
+  border-style: dashed solid dashed dashed;
+}
+
+.sj-b(@w:12px, @c: #43c5ef) { 
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  border-width: @w;
+  border-color: @c transparent transparent transparent;
+  border-style: solid dashed dashed dashed;
+}
+
+.arrow-r {
+  position: relative;
+  &:after {
+    content: " ";
+    height: 6px;
+    width: 6px;
+    border-width: 2px 2px 0 0;
+    border-color: #C8C8CD;
+    border-style: solid;
+    transform-origin: right center;
+    transform: rotate(45deg);
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -2px;
+  }
+}

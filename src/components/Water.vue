@@ -1,0 +1,17 @@
+<template>
+  <div class="Water fullScreen">
+    水情信息
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Water'
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="less">
+  .Water {
+  }
+</style>
