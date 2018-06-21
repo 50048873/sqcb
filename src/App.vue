@@ -1,21 +1,13 @@
 <template>
-  <div id="rootEle">
-    <Slide></Slide>
-  </div>
+  <HuiSlide></HuiSlide>
 </template>
 
 <script>
-import Slide from '@/components/Slide'
+import HuiSlide from '@/components/hui/HuiSlide'
 export default {
   name: 'App',
   components: {
-    Slide
+    HuiSlide
   }
 }
 </script>
-
-<style>
-#rootEle {
-
-}
-</style>

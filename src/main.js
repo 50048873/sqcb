@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 
 import '@/assets/less/base.less'
+import '../static/weui/dist/style/weui.min.css'
 import '@/assets/less/common.less'
 
 Vue.config.productionTip = false

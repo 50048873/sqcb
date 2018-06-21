@@ -63,7 +63,7 @@ export default {
 <style scoped lang="less">
   .Home {
     background: url(/static/img/home-bg.jpg) no-repeat;
-    background-size: contain;
+    background-size: cover;
     .nav {
       padding: 30px 15px;
       a {
