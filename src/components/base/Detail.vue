@@ -20,8 +20,8 @@
     </div>
     <div class="tab-wrap">
       <HuiTab1 :data="tabData" size="small" @tab-click="tabClick"></HuiTab1>
-      <HighchartsLine class="highcharts" v-show="currentIndex === 0" yTitleText="水位（m）" :data="chartData" v-if="chartData.length"></HighchartsLine>
-      <Table v-show="currentIndex === 1"></Table>
+      <HighchartsLine class="highcharts" v-show="currentIndex === 0" :yTitleText="yTitleText" :data="chartData" v-if="chartData.length"></HighchartsLine>
+      <Table v-show="currentIndex === 1" :theadData="theadData" :tbodyData="tbodyData"></Table>
     </div>
   </div>
 </template>
@@ -104,13 +104,49 @@ export default {
           'y': 98.84,
           'percent': '+3.70%'
         }
-      ]
+      ],
+      theadData: [
+        {
+          title: '时间'
+        },
+        {
+          title: '水位（m）'
+        }
+      ],
+      tbodyData: [
+        {
+          time: '2018-06-21 11:30',
+          value: '2.80'
+        },
+        {
+          time: '2018-06-21 11:30',
+          value: '2.80'
+        },
+        {
+          time: '2018-06-21 11:30',
+          value: '2.80'
+        }
+      ],
+      yTitleText: '水位（m）'
     }
   },
   methods: {
     tabClick (item, index) {
       this.currentIndex = index
+    },
+    handleType () {
+      const name = this.$route.name.toLowerCase()
+      switch (name) {
+        case 'raindetail':
+          this.yTitleText = '雨量（m）'
+          break
+        default:
+          this.yTitleText = '水位（m）'
+      }
     }
+  },
+  created () {
+    this.handleType()
   }
 }
 </script>

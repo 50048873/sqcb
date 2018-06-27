@@ -15,34 +15,15 @@
 </template>
 
 <script>
-const theadData = [
-  {
-    title: '时间'
-  },
-  {
-    title: '水位（m）'
-  }
-]
-const tbodyData = [
-  {
-    time: '2018-06-21 11:30',
-    value: '2.80'
-  },
-  {
-    time: '2018-06-21 11:30',
-    value: '2.80'
-  },
-  {
-    time: '2018-06-21 11:30',
-    value: '2.80'
-  }
-]
+
 export default {
   name: 'Table',
-  data () {
-    return {
-      theadData: theadData,
-      tbodyData: tbodyData
+  props: {
+    theadData: {
+      type: Array
+    },
+    tbodyData: {
+      type: Array
     }
   }
 }

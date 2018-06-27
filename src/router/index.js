@@ -3,7 +3,8 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import List from '@/components/base/List'
 import Detail from '@/components/base/Detail'
-import WarnCondition from '@/components/Rain/WarnCondition'
+import RainCondition from '@/components/Rain/RainCondition'
+import WindCondition from '@/components/Wind/WindCondition'
 
 Vue.use(Router)
 
@@ -43,9 +44,9 @@ const router = new Router({
       }
     },
     {
-      path: '/rain/warnCondition',
-      name: 'warnCondition',
-      component: WarnCondition,
+      path: '/rain/RainCondition',
+      name: 'RainCondition',
+      component: RainCondition,
       meta: {
         title: '降雨报警说明'
       }
@@ -56,6 +57,29 @@ const router = new Router({
       component: Detail,
       meta: {
         title: '雨位信息'
+      }
+    },
+    {
+      path: '/wind',
+      name: 'Wind',
+      component: List,
+      meta: {
+        title: '风情信息'
+      }
+    },
+    {
+      path: '/wind/WindCondition',
+      name: 'WindCondition',
+      component: WindCondition,
+      meta: {
+        title: '风力等级说明'
+      }
+    },
+    {
+      path: '/wind/:id',
+      name: 'WindDetail',
+      beforeEnter: (to, from, next) => {
+        next(false)
       }
     }
   ]
@@ -68,8 +92,8 @@ router.beforeEach((to, from, next) => {
     if (to.query && to.query.title) {
       title = to.query.title + title
     }
+    document.title = title
   }
-  document.title = title
   next()
 })
 

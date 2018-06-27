@@ -1,5 +1,5 @@
 <template>
-  <div class="highcharts-container line-top line-bottom"></div>
+  <div class="highcharts-wrap line-top line-bottom"></div>
 </template>
 
 <script>
@@ -57,7 +57,11 @@ export default {
           tickWidth: 1,
           title: {
             text: this.yTitleText,
-            align: 'high'
+            align: 'high',
+            offset: -20,
+            rotation: 0,
+            x: 2,
+            y: -20
           }
         },
         legend: {
@@ -97,8 +101,14 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
-.highcharts-container {
-
+<style lang="less">
+.highcharts-wrap {
+  .highcharts-container {
+    padding-top: 20px;
+    overflow: visible!important;
+  }
+  svg {
+    overflow: visible!important;
+  }
 }
 </style>

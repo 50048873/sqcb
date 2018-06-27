@@ -12,10 +12,17 @@
         <span class="title">{{item.title}}</span>
       </router-link>
     </nav>
+    <HuiTable :data="data">
+      <HuiTableColumn prop="date" label="日期"></HuiTableColumn>
+      <HuiTableColumn prop="name" label="姓名"></HuiTableColumn>
+      <HuiTableColumn prop="address" label="地址"></HuiTableColumn>
+    </HuiTable>
   </div>
 </template>
 
 <script>
+import HuiTable from '@/components/hui/HuiTable'
+import HuiTableColumn from '@/components/hui/HuiTableColumn.js'
 const navData = [
   {
     title: '水情',
@@ -38,14 +45,30 @@ const navData = [
 ]
 export default {
   name: 'Home',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
+  components: {
+    HuiTable,
+    HuiTableColumn
   },
   methods: {
     initSingleDirectionData () {
       this.navData = navData
+      this.data = [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }]
     },
     getBg (index) {
       return {
@@ -62,8 +85,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
   .Home {
-    background: url(/static/img/home-bg.jpg) no-repeat;
+    background: url(/static/img/home-bg.jpg);
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     .nav {
       padding: 30px 15px;
       a {

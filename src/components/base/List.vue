@@ -1,13 +1,190 @@
 <template>
   <div class="Water fullScreen">
-    <HuiList1 :data="data" @list-click="listClick"></HuiList1>
+    <HuiList1 class="theme2" :data="data" theme="HuiList1-theme2" @list-click="listClick"></HuiList1>
     <FloatBall v-if="showFloatBall" right="15" bottom="15" @ball-click="ballClick"></FloatBall>
   </div>
 </template>
 
 <script>
-import HuiList1 from '@/components/hui/HuiList1'
+import HuiList1 from '@/components/hui/HuiList1/HuiList1'
 import FloatBall from '@/components/base/FloatBall'
+const waterList = [
+  {
+    'id': 1,
+    'title': '中宁站',
+    'time': '2018-06-13 14:22',
+    'status': 1,
+    'children': [
+      {
+        'title': '水位',
+        'value': '55.4',
+        'unit': 'm'
+      },
+      {
+        'title': '预警水位',
+        'value': '1443.32',
+        'unit': 'm'
+      }
+    ]
+  },
+  {
+    'id': 2,
+    'title': '红堡寺站',
+    'time': '2018-06-13 14:22',
+    'children': [
+      {
+        'title': '水位',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '预警水位',
+        'value': '1443.32',
+        'unit': 'm'
+      }
+    ]
+  },
+  {
+    'id': 3,
+    'title': '河西镇',
+    'time': '2018-06-13 14:22',
+    'children': [
+      {
+        'title': '水位',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '预警水位',
+        'value': '1443.32',
+        'unit': 'm'
+      }
+    ]
+  }
+]
+const rainList = [
+  {
+    'id': 1,
+    'title': '中宁站',
+    'time': '2018-06-13 14:22',
+    'status': 1,
+    'children': [
+      {
+        'title': '今日雨量',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '当年累计',
+        'value': '1443.32',
+        'unit': 'm'
+      }
+    ]
+  },
+  {
+    'id': 2,
+    'title': '红堡寺站',
+    'time': '2018-06-13 14:22',
+    'children': [
+      {
+        'title': '今日雨量',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '当年累计',
+        'value': '1443.32',
+        'unit': 'm'
+      }
+    ]
+  },
+  {
+    'id': 3,
+    'title': '河西镇',
+    'time': '2018-06-13 14:22',
+    'children': [
+      {
+        'title': '今日雨量',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '当年累计',
+        'value': '1443.32',
+        'unit': 'm'
+      }
+    ]
+  }
+]
+const windList = [
+  {
+    'id': 1,
+    'title': '中宁站',
+    'time': '2018-06-13 14:22',
+    'status': 1,
+    'children': [
+      {
+        'title': '风速',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '风力等级',
+        'value': '12',
+        'unit': ''
+      },
+      {
+        'title': '风向',
+        'value': '东南风',
+        'unit': ''
+      }
+    ]
+  },
+  {
+    'id': 2,
+    'title': '红堡寺站',
+    'time': '2018-06-13 14:22',
+    'children': [
+      {
+        'title': '风速',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '风力等级',
+        'value': '12',
+        'unit': ''
+      },
+      {
+        'title': '风向',
+        'value': '东南风',
+        'unit': ''
+      }
+    ]
+  },
+  {
+    'id': 3,
+    'title': '河西镇',
+    'time': '2018-06-13 14:22',
+    'children': [
+      {
+        'title': '风速',
+        'value': '55.4',
+        'unit': 'mm'
+      },
+      {
+        'title': '风力等级',
+        'value': '12',
+        'unit': ''
+      },
+      {
+        'title': '风向',
+        'value': '东南风',
+        'unit': ''
+      }
+    ]
+  }
+]
 export default {
   name: 'Water',
   components: {
@@ -17,62 +194,7 @@ export default {
   data () {
     return {
       showFloatBall: false,
-      data: [
-        {
-          'id': 1,
-          'title': '中宁站',
-          'time': '2018-06-13 14:22',
-          'children': [
-            {
-              'title': '水位',
-              'value': '1443.54',
-              'unit': 'm',
-              'status': 1
-            },
-            {
-              'title': '预警水位',
-              'value': '1443.32',
-              'unit': 'm'
-            }
-          ]
-        },
-        {
-          'id': 2,
-          'title': '红堡寺站',
-          'time': '2018-06-13 14:22',
-          'children': [
-            {
-              'title': '水位',
-              'value': '1730.24',
-              'unit': 'm',
-              'status': 1
-            },
-            {
-              'title': '预警水位',
-              'value': '1729.33',
-              'unit': 'm'
-            }
-          ]
-        },
-        {
-          'id': 3,
-          'title': '河西镇',
-          'time': '2018-06-13 14:22',
-          'children': [
-            {
-              'title': '水位',
-              'value': '1722.24',
-              'unit': 'm',
-              'status': 0
-            },
-            {
-              'title': '预警水位',
-              'value': '1723.45',
-              'unit': 'm'
-            }
-          ]
-        }
-      ]
+      data: []
     }
   },
   methods: {
@@ -82,16 +204,23 @@ export default {
     },
     ballClick (iconClass) {
       const parentPath = this.$route.path
-      this.$router.push(`${parentPath}/warnCondition`)
+      const name = this.$route.name
+      this.$router.push(`${parentPath}/${name}Condition`)
     },
     handleFloatBallStatus () {
       const name = this.$route.name.toLowerCase()
       switch (name) {
         case 'rain':
           this.showFloatBall = true
+          this.data = rainList
+          break
+        case 'wind':
+          this.showFloatBall = true
+          this.data = windList
           break
         default:
           this.showFloatBall = false
+          this.data = waterList
       }
     }
   },
@@ -102,7 +231,13 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="less">
+<style lang="less">
 .Water {
+  .HuiList1-theme2.theme2 {
+    li {
+      margin-right: 10px;
+      margin-left: 10px;
+    }
+  }
 }
 </style>
