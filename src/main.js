@@ -8,6 +8,9 @@ import '@/assets/less/base.less'
 import '../static/weui/dist/style/weui.min.css'
 import '@/assets/less/common.less'
 
+import useComponent from '@/assets/js/useComponent'
+useComponent()
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

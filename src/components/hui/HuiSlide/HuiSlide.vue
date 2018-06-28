@@ -7,7 +7,7 @@
 <script>
 import storage from 'good-storage'
 export default {
-  name: 'Slide',
+  name: 'HuiSlide',
   data () {
     return {
       transitionName: 'slideToLeft'

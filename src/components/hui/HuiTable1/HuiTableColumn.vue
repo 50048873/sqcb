@@ -1,3 +1,4 @@
+<script>
 export default {
   name: 'HuiTableColumn',
   props: {
@@ -10,10 +11,8 @@ export default {
   },
   render (h) {
     return (
-      <tr>
-        <th>1</th>
-        <th>1</th>
-      </tr>
+      <th>{this.label}</th>
     )
   }
 }
+</script>

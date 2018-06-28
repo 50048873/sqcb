@@ -6,23 +6,17 @@
         :key="index"
         :to="item.to"
         :style="getBg(index)">
-        <span class="icon-wrap">
-          <i :class="item.iconCls">图标</i>
-        </span>
+        <!-- <span class="icon-wrap"> -->
+        <water-icon></water-icon>
+        <!-- </span> -->
         <span class="title">{{item.title}}</span>
       </router-link>
     </nav>
-    <HuiTable :data="data">
-      <HuiTableColumn prop="date" label="日期"></HuiTableColumn>
-      <HuiTableColumn prop="name" label="姓名"></HuiTableColumn>
-      <HuiTableColumn prop="address" label="地址"></HuiTableColumn>
-    </HuiTable>
   </div>
 </template>
 
 <script>
-import HuiTable from '@/components/hui/HuiTable'
-import HuiTableColumn from '@/components/hui/HuiTableColumn.js'
+import WaterIcon from './Water/WaterIcon'
 const navData = [
   {
     title: '水情',
@@ -46,29 +40,11 @@ const navData = [
 export default {
   name: 'Home',
   components: {
-    HuiTable,
-    HuiTableColumn
+    WaterIcon
   },
   methods: {
     initSingleDirectionData () {
       this.navData = navData
-      this.data = [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }]
     },
     getBg (index) {
       return {
@@ -102,9 +78,9 @@ export default {
         background-size: cover;
         color: black;
         font-size: 24px;
-        .icon-wrap {
-          font-size: 48px;
-        }
+        // .icon-wrap {
+        //   font-size: 48px;
+        // }
         &:nth-child(2n) {
           flex-direction: row-reverse;
         }

@@ -19,22 +19,21 @@
       </a>
     </div>
     <div class="tab-wrap">
-      <HuiTab1 :data="tabData" size="small" @tab-click="tabClick"></HuiTab1>
-      <HighchartsLine class="highcharts" v-show="currentIndex === 0" :yTitleText="yTitleText" :data="chartData" v-if="chartData.length"></HighchartsLine>
-      <Table v-show="currentIndex === 1" :theadData="theadData" :tbodyData="tbodyData"></Table>
+      <hui-tab1 :data="tabData" size="small" @tab-click="tabClick"></hui-tab1>
+      <highcharts-line class="highcharts" v-show="currentIndex === 0" :yTitleText="yTitleText" :data="chartData" v-if="chartData.length"></highcharts-line>
+      <hui-table1 :data="tbodyData" v-show="currentIndex === 1">
+        <hui-table-column prop="time" label="时间"></hui-table-column>
+        <hui-table-column prop="value" label="水位（m）"></hui-table-column>
+      </hui-table1>
     </div>
   </div>
 </template>
 
 <script>
-import HuiTab1 from '@/components/hui/HuiTab1'
-import Table from '@/components/base/Table'
 import HighchartsLine from '@/components/base/HighchartsLine'
 export default {
   name: 'WaterDetail',
   components: {
-    HuiTab1,
-    Table,
     HighchartsLine
   },
   data () {
@@ -103,14 +102,6 @@ export default {
           'curDate': '2017-10',
           'y': 98.84,
           'percent': '+3.70%'
-        }
-      ],
-      theadData: [
-        {
-          title: '时间'
-        },
-        {
-          title: '水位（m）'
         }
       ],
       tbodyData: [

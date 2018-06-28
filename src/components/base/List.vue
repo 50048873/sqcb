@@ -1,12 +1,11 @@
 <template>
   <div class="Water fullScreen">
-    <HuiList1 class="theme2" :data="data" theme="HuiList1-theme2" @list-click="listClick"></HuiList1>
-    <FloatBall v-if="showFloatBall" right="15" bottom="15" @ball-click="ballClick"></FloatBall>
+    <hui-list1 class="theme2" :data="data" theme="HuiList1-theme2" @list-click="listClick"></hui-list1>
+    <float-ball v-if="showFloatBall" right="15" bottom="15" @ball-click="ballClick"></float-ball>
   </div>
 </template>
 
 <script>
-import HuiList1 from '@/components/hui/HuiList1/HuiList1'
 import FloatBall from '@/components/base/FloatBall'
 const waterList = [
   {
@@ -188,7 +187,6 @@ const windList = [
 export default {
   name: 'Water',
   components: {
-    HuiList1,
     FloatBall
   },
   data () {

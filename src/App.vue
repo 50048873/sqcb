@@ -1,13 +1,9 @@
 <template>
-  <HuiSlide></HuiSlide>
+  <hui-slide></hui-slide>
 </template>
 
 <script>
-import HuiSlide from '@/components/hui/HuiSlide'
 export default {
-  name: 'App',
-  components: {
-    HuiSlide
-  }
+  name: 'App'
 }
 </script>
