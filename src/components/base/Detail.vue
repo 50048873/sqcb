@@ -23,7 +23,7 @@
       <highcharts-line class="highcharts" v-show="currentIndex === 0" :yTitleText="yTitleText" :data="chartData" v-if="chartData.length"></highcharts-line>
       <hui-table1 :data="tbodyData" v-show="currentIndex === 1">
         <hui-table-column prop="time" label="时间"></hui-table-column>
-        <hui-table-column prop="value" label="水位（m）"></hui-table-column>
+        <hui-table-column prop="value" :label="yTitleText"></hui-table-column>
       </hui-table1>
     </div>
   </div>

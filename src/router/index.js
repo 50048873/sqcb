@@ -3,8 +3,8 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import List from '@/components/base/List'
 import Detail from '@/components/base/Detail'
-import RainCondition from '@/components/Rain/RainCondition'
-import WindCondition from '@/components/Wind/WindCondition'
+import RainCondition from '@/components/rain/RainCondition'
+import WindCondition from '@/components/wind/WindCondition'
 
 Vue.use(Router)
 
