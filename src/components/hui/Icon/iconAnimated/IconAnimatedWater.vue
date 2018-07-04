@@ -1,5 +1,9 @@
 <template>
-  <svg width="100px" height="100px" viewBox="0 0 100 100" name="water">
+  <svg xmlns="http://www.w3.org/2000/svg"
+    :width="width"
+    :height="height"
+    :fill="iconColor"
+    viewBox="0 0 100 100">
     <g>
       <path d="M71.193,24.624c-3.717-5.281-7.611-10.437-11.68-15.455c-1.392-1.724-2.689-3.288-3.851-4.663
         c-0.408-0.484-0.771-0.909-1.083-1.274l-0.396-0.455L51.755,0l-2.429,2.776l-0.396,0.455c-1.674,1.955-3.319,3.935-4.936,5.937
@@ -30,13 +34,10 @@
 </template>
 
 <script>
+import {iconProps} from '../mixin'
 export default {
-  name: 'IconWater',
-  data () {
-    return {
-      d: 'M26.064,63.003c0,14.238,11.502,25.779,25.689,25.779S77.443,77.24,77.443,63.003c0-14.236-13.351-7.028-25.689,0C39.363,70.063,26.064,48.767,26.064,63.003z'
-    }
-  }
+  name: 'HuiIconAnimatedWater',
+  mixins: [iconProps]
 }
 </script>
 
@@ -62,12 +63,6 @@ export default {
   .slideOutDown {
     animation-iteration-count: infinite;
     animation-name: slideOutDown;
-    &:nth-child(1) {
-      animation-duration: 1.8s;
-    }
-    &:nth-child(2) {
-      animation-duration: 1.2s;
-    }
     &:nth-child(3) {
       animation-duration: 2.2s;
     }

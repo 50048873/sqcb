@@ -6,9 +6,9 @@
         :key="index"
         :to="item.to"
         :style="getBg(index)">
-        <icon-water v-if="index === 0"></icon-water>
-        <icon-rain v-if="index === 1"></icon-rain>
-        <icon-wind v-if="index === 2"></icon-wind>
+        <hui-icon-animated-water v-if="index === 0" />
+        <hui-icon-animated-rain v-if="index === 1" />
+        <hui-icon-animated-wind v-if="index === 2" />
         <span class="title">{{item.title}}</span>
       </router-link>
     </nav>
@@ -16,9 +16,6 @@
 </template>
 
 <script>
-import IconWater from './icon/IconWater'
-import IconRain from './icon/IconRain'
-import IconWind from './icon/IconWind'
 const navData = [
   {
     title: '水情',
@@ -41,11 +38,6 @@ const navData = [
 ]
 export default {
   name: 'Home',
-  components: {
-    IconWater,
-    IconRain,
-    IconWind
-  },
   methods: {
     initSingleDirectionData () {
       this.navData = navData

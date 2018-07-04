@@ -1,5 +1,9 @@
 <template>
-  <svg width="100px" height="100px" viewBox="0 0 100 100" name="wind">
+  <svg xmlns="http://www.w3.org/2000/svg"
+    :width="width"
+    :height="height"
+    :fill="iconColor"
+    viewBox="0 0 100 100">
     <path class="slideRight" d="M38.578,27.868c0-1.601,0.296-3.082,0.889-4.446c0.593-1.362,1.407-2.563,2.445-3.6c1.036-1.037,2.237-1.853,3.599-2.444
   c1.364-0.593,2.845-0.89,4.444-0.89c1.542,0,2.994,0.297,4.357,0.89c1.362,0.592,2.563,1.407,3.6,2.444
   c1.037,1.037,1.854,2.238,2.443,3.6c0.594,1.364,0.892,2.845,0.892,4.446c0,1.54-0.298,3.006-0.892,4.4
@@ -19,8 +23,10 @@
 </template>
 
 <script>
+import {iconProps} from '../mixin'
 export default {
-  name: 'IconWater'
+  name: 'HuiIconAnimatedWind',
+  mixins: [iconProps]
 }
 </script>
 

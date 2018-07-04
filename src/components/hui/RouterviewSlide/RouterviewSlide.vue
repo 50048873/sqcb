@@ -5,9 +5,8 @@
 </template>
 
 <script>
-import storage from 'good-storage'
 export default {
-  name: 'HuiSlide',
+  name: 'HuiRouterviewSlide',
   data () {
     return {
       transitionName: 'slideToLeft'
@@ -17,7 +16,7 @@ export default {
     '$route' (to, from) {
       let toPath = to.path
       let fromPath = from.path
-      let routers = storage.session.get('routers')
+      let routers = sessionStorage.getItem('routers')
       let routersArr = (routers && routers.split(',')) || []
       if (routersArr.length === 0) {
         routersArr.push(fromPath)
@@ -32,7 +31,7 @@ export default {
           routersArr.push(toPath)
         }
       }
-      storage.session.set('routers', routersArr.join(','))
+      sessionStorage.setItem('routers', routersArr.join(','))
     }
   }
 }

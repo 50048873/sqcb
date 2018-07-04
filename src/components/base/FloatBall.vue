@@ -6,7 +6,8 @@
     @touchend.prevent="end"
     :style="getPos"
     ref="nAdd">
-    <i :class="iconClass"></i>
+    <i :class="iconClass" v-if="iconClass"></i>
+    <slot v-if="!iconClass"></slot>
   </div>
 </template>
 
@@ -19,7 +20,7 @@ export default {
   props: {
     iconClass: {
       type: String,
-      default: 'nxst-add'
+      default: ''
     },
     top: {
       type: [String, Number]

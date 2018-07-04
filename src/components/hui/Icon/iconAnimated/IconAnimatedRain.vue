@@ -1,5 +1,9 @@
 <template>
-  <svg width="100px" height="100px" viewBox="0 0 100 100" name="rain">
+  <svg xmlns="http://www.w3.org/2000/svg"
+    :width="width"
+    :height="height"
+    :fill="iconColor"
+    viewBox="0 0 100 100">
     <path d="M72.063,15.719C67.48,6.416,57.925,0.007,46.859,0.007c-14.844,0-26.967,11.507-28.012,26.074C7.943,29.19,0,38.72,0,50
   c0,13.307,11.065,24.159,25.003,24.927c0,0,44.782,0.076,45.31,0.076C86.705,75.004,100,61.707,100,45.315
   C99.975,29.517,87.625,16.637,72.063,15.719z"/>
@@ -17,8 +21,10 @@
 </template>
 
 <script>
+import {iconProps} from '../mixin'
 export default {
-  name: 'IconWater'
+  name: 'HuiIconAnimatedRain',
+  mixins: [iconProps]
 }
 </script>
 

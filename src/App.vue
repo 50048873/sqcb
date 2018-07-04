@@ -1,5 +1,5 @@
 <template>
-  <hui-slide></hui-slide>
+  <hui-routerview-slide></hui-routerview-slide>
 </template>
 
 <script>
