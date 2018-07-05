@@ -1,3 +1,4 @@
-export const baseUrl = 'http://10.100.50.187:8080/hydr-web/'
+// 跨域开发接口
+export const baseUrl = process.env.API_HOST
 
 export const success = 1

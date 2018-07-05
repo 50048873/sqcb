@@ -6,7 +6,7 @@
           <p>开始时间</p>
         </div>
         <div class="weui-cell__ft">
-          <input class="weui-input" v-model="startTime" type="datetime-local" value="">
+          <input class="weui-input" v-model="beginDate" @change="getRiveDetailData" type="datetime-local" value="">
         </div>
       </a>
       <a class="weui-cell weui-cell_access" href="javascript:;">
@@ -14,32 +14,41 @@
           <p>结束时间</p>
         </div>
         <div class="weui-cell__ft">
-          <input class="weui-input" v-model="endTime" type="datetime-local" value="">
+          <input class="weui-input" v-model="endDate" @change="getRiveDetailData" type="datetime-local" value="">
         </div>
       </a>
     </div>
     <div class="tab-wrap">
-      <hui-tab1 :data="tabData" size="small" @tab-click="tabClick"></hui-tab1>
-      <highcharts-line class="highcharts" v-show="currentIndex === 0" :yTitleText="yTitleText" :data="chartData" v-if="chartData.length"></highcharts-line>
-      <hui-table1 :data="tbodyData" v-show="currentIndex === 1">
+      <hui-tab1 :data="tabData" size="small" @tab-click="tabClick" v-if="data.length"></hui-tab1>
+      <highcharts-line class="highcharts" v-show="currentIndex === 0 && data.length" :yTitleText="yTitleText" :data="data"></highcharts-line>
+      <hui-table1 :data="data" v-show="currentIndex === 1">
         <hui-table-column prop="time" label="时间"></hui-table-column>
         <hui-table-column prop="value" :label="yTitleText"></hui-table-column>
       </hui-table1>
     </div>
+    <no-data v-if="!data.length"></no-data>
   </div>
 </template>
 
 <script>
 import HighchartsLine from '@/components/base/HighchartsLine'
+import {getDateStr} from '@/assets/js/util'
+import * as api from '@/assets/js/api'
+import {success} from '@/assets/js/config'
 export default {
   name: 'WaterDetail',
   components: {
     HighchartsLine
   },
+  props: {
+    id: {
+      type: String
+    }
+  },
   data () {
     return {
-      startTime: '2018-06-20T18:28:00',
-      endTime: '2018-06-20T18:28:00',
+      beginDate: getDateStr(-365, '00', '00', null, true),
+      endDate: getDateStr(0, null, null, null, true),
       currentIndex: 0,
       tabData: [
         {
@@ -49,75 +58,7 @@ export default {
           'title': '表格'
         }
       ],
-      chartData: [
-        {
-          'curDate': '2016-10',
-          'y': 95.31
-        },
-        {
-          'curDate': '2016-11',
-          'y': 95.58
-        },
-        {
-          'curDate': '2016-12',
-          'y': 95.85
-        },
-        {
-          'curDate': '2017-01',
-          'y': 96.12
-        },
-        {
-          'curDate': '2017-02',
-          'y': 96.38
-        },
-        {
-          'curDate': '2017-03',
-          'y': 96.65
-        },
-        {
-          'curDate': '2017-04',
-          'y': 96.93
-        },
-        {
-          'curDate': '2017-05',
-          'y': 97.20
-        },
-        {
-          'curDate': '2017-06',
-          'y': 97.47
-        },
-        {
-          'curDate': '2017-07',
-          'y': 97.74
-        },
-        {
-          'curDate': '2017-08',
-          'y': 98.01
-        },
-        {
-          'curDate': '2017-09',
-          'y': 98.29
-        },
-        {
-          'curDate': '2017-10',
-          'y': 98.84,
-          'percent': '+3.70%'
-        }
-      ],
-      tbodyData: [
-        {
-          time: '2018-06-21 11:30',
-          value: '2.80'
-        },
-        {
-          time: '2018-06-21 11:30',
-          value: '2.80'
-        },
-        {
-          time: '2018-06-21 11:30',
-          value: '2.80'
-        }
-      ],
+      data: [],
       yTitleText: '水位（m）'
     }
   },
@@ -126,14 +67,71 @@ export default {
       this.currentIndex = index
     },
     handleType () {
-      const name = this.$route.name.toLowerCase()
+      const name = this.$route.name
       switch (name) {
-        case 'raindetail':
-          this.yTitleText = '雨量（m）'
-          break
-        default:
+        case 'waterDetail':
           this.yTitleText = '水位（m）'
+          this.getRiveDetailData()
+          break
+        case 'rainDetail':
+          this.yTitleText = '雨量（m）'
+          this.getPptnDetailData()
+          break
+        case 'windDetail':
+          break
       }
+    },
+    getRiveDetailData () {
+      let params = {
+        stcd: this.id,
+        beginDate: this.beginDate.replace('T', ' '),
+        endDate: this.endDate.replace('T', ' ')
+      }
+      api.getRiveDetailData(params)
+        .then((res) => {
+          if (res.status === success) {
+            let convertedRes = []
+            let data = res.data
+            data.forEach((item) => {
+              convertedRes.push({
+                stcd: item.stcd,
+                time: item.tm,
+                value: item.z
+              })
+            })
+            this.data = convertedRes
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：Detail.vue')
+        })
+    },
+    getPptnDetailData () {
+      let params = {
+        stcd: this.id,
+        beginDate: this.beginDate.replace('T', ' '),
+        endDate: this.endDate.replace('T', ' ')
+      }
+      api.getPptnDetailData(params)
+        .then((res) => {
+          if (res.status === success) {
+            let convertedRes = []
+            let data = res.data
+            data.forEach((item) => {
+              convertedRes.push({
+                stcd: item.stcd,
+                time: item.tm,
+                value: item.drp
+              })
+            })
+            this.data = convertedRes
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：Detail.vue')
+        })
     }
   },
   created () {

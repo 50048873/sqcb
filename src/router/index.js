@@ -13,7 +13,7 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'home',
       component: Home,
       meta: {
         title: '水情测报'
@@ -21,7 +21,7 @@ const router = new Router({
     },
     {
       path: '/water',
-      name: 'Water',
+      name: 'water',
       component: List,
       meta: {
         title: '水情信息'
@@ -29,7 +29,8 @@ const router = new Router({
     },
     {
       path: '/water/:id',
-      name: 'Detail',
+      name: 'waterDetail',
+      props: true,
       component: Detail,
       meta: {
         title: '水位信息'
@@ -37,7 +38,7 @@ const router = new Router({
     },
     {
       path: '/rain',
-      name: 'Rain',
+      name: 'rain',
       component: List,
       meta: {
         title: '雨情信息'
@@ -45,7 +46,7 @@ const router = new Router({
     },
     {
       path: '/rain/RainCondition',
-      name: 'RainCondition',
+      name: 'rainCondition',
       component: RainCondition,
       meta: {
         title: '降雨报警说明'
@@ -53,7 +54,8 @@ const router = new Router({
     },
     {
       path: '/rain/:id',
-      name: 'RainDetail',
+      name: 'rainDetail',
+      props: true,
       component: Detail,
       meta: {
         title: '雨位信息'
@@ -61,7 +63,7 @@ const router = new Router({
     },
     {
       path: '/wind',
-      name: 'Wind',
+      name: 'wind',
       component: List,
       meta: {
         title: '风情信息'
@@ -69,7 +71,7 @@ const router = new Router({
     },
     {
       path: '/wind/WindCondition',
-      name: 'WindCondition',
+      name: 'windCondition',
       component: WindCondition,
       meta: {
         title: '风力等级说明'
@@ -77,7 +79,8 @@ const router = new Router({
     },
     {
       path: '/wind/:id',
-      name: 'WindDetail',
+      name: 'windDetail',
+      props: true,
       beforeEnter: (to, from, next) => {
         next(false)
       }

@@ -30,8 +30,8 @@ export default {
   mixins: [chart],
   methods: {
     draw () {
-      let categories = getDataByKey(standardDate(this.data, 'curDate'), 'curDate')
-      let data = getDataByKey(this.data, 'y')
+      let categories = getDataByKey(standardDate(this.data, 'time'), 'time')
+      let data = getDataByKey(this.data, 'value')
       let options = {
         credits: {
           enabled: false

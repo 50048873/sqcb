@@ -12,183 +12,7 @@
 import FloatBall from '@/components/base/FloatBall'
 import * as api from '@/assets/js/api'
 import {success} from '@/assets/js/config'
-// const waterList = [
-//   {
-//     'id': 1,
-//     'title': '中宁站',
-//     'time': '2018-06-13 14:22',
-//     'status': 1,
-//     'children': [
-//       {
-//         'title': '水位',
-//         'value': '55.4',
-//         'unit': 'm'
-//       },
-//       {
-//         'title': '预警水位',
-//         'value': '1443.32',
-//         'unit': 'm'
-//       }
-//     ]
-//   },
-//   {
-//     'id': 2,
-//     'title': '红堡寺站',
-//     'time': '2018-06-13 14:22',
-//     'children': [
-//       {
-//         'title': '水位',
-//         'value': '55.4',
-//         'unit': 'mm'
-//       },
-//       {
-//         'title': '预警水位',
-//         'value': '1443.32',
-//         'unit': 'm'
-//       }
-//     ]
-//   },
-//   {
-//     'id': 3,
-//     'title': '河西镇',
-//     'time': '2018-06-13 14:22',
-//     'children': [
-//       {
-//         'title': '水位',
-//         'value': '55.4',
-//         'unit': 'mm'
-//       },
-//       {
-//         'title': '预警水位',
-//         'value': '1443.32',
-//         'unit': 'm'
-//       }
-//     ]
-//   }
-// ]
-const rainList = [
-  {
-    'id': 1,
-    'title': '中宁站',
-    'time': '2018-06-13 14:22',
-    'status': 1,
-    'children': [
-      {
-        'title': '今日雨量',
-        'value': '55.4',
-        'unit': 'mm'
-      },
-      {
-        'title': '当年累计',
-        'value': '1443.32',
-        'unit': 'm'
-      }
-    ]
-  },
-  {
-    'id': 2,
-    'title': '红堡寺站',
-    'time': '2018-06-13 14:22',
-    'children': [
-      {
-        'title': '今日雨量',
-        'value': '55.4',
-        'unit': 'mm'
-      },
-      {
-        'title': '当年累计',
-        'value': '1443.32',
-        'unit': 'm'
-      }
-    ]
-  },
-  {
-    'id': 3,
-    'title': '河西镇',
-    'time': '2018-06-13 14:22',
-    'children': [
-      {
-        'title': '今日雨量',
-        'value': '55.4',
-        'unit': 'mm'
-      },
-      {
-        'title': '当年累计',
-        'value': '1443.32',
-        'unit': 'm'
-      }
-    ]
-  }
-]
-const windList = [
-  {
-    'id': 1,
-    'title': '中宁站',
-    'time': '2018-06-13 14:22',
-    'status': 1,
-    'children': [
-      {
-        'title': '风速',
-        'value': '55.4',
-        'unit': 'mm'
-      },
-      {
-        'title': '风力等级',
-        'value': '12',
-        'unit': ''
-      },
-      {
-        'title': '风向',
-        'value': '东南风',
-        'unit': ''
-      }
-    ]
-  },
-  {
-    'id': 2,
-    'title': '红堡寺站',
-    'time': '2018-06-13 14:22',
-    'children': [
-      {
-        'title': '风速',
-        'value': '55.4',
-        'unit': 'mm'
-      },
-      {
-        'title': '风力等级',
-        'value': '12',
-        'unit': ''
-      },
-      {
-        'title': '风向',
-        'value': '东南风',
-        'unit': ''
-      }
-    ]
-  },
-  {
-    'id': 3,
-    'title': '河西镇',
-    'time': '2018-06-13 14:22',
-    'children': [
-      {
-        'title': '风速',
-        'value': '55.4',
-        'unit': 'mm'
-      },
-      {
-        'title': '风力等级',
-        'value': '12',
-        'unit': ''
-      },
-      {
-        'title': '风向',
-        'value': '东南风',
-        'unit': ''
-      }
-    ]
-  }
-]
+import {loading} from '@/assets/js/util'
 export default {
   name: 'Water',
   components: {
@@ -203,27 +27,14 @@ export default {
       isWater: false
     }
   },
-  beforeRouteEnter (to, from, next) {
-    api.getRiverRealList()
-      .then((res) => {
-        if (res.status === success) {
-          console.log(res)
-          next((vm) => {
-            console.log(vm)
-            vm.data = vm.convertRiverRealList(res.data)
-            console.log(vm.data)
-          })
-        } else {
-          console.log(res.msg)
-        }
-      }, (err) => {
-        console.log(err)
-      })
+  beforeRouteLeave (to, from, next) {
+    loading.remove()
+    next()
   },
   methods: {
     listClick (item, index) {
       const parentPath = this.$route.path
-      this.$router.push({path: `${parentPath}/${item.id}`, query: {title: item.title}})
+      this.$router.push({path: `${parentPath}/${item.stcd}`, query: {title: item.title}})
     },
     ballClick (iconClass) {
       const parentPath = this.$route.path
@@ -233,21 +44,59 @@ export default {
     handleFloatBallStatus () {
       const name = this.$route.name.toLowerCase()
       switch (name) {
+        case 'water':
+          this.showFloatBall = false
+          this.getRiverRealList()
+          this.isWater = true
+          break
         case 'rain':
           this.showFloatBall = true
-          this.data = rainList
+          this.getPptnRealList()
           this.isRain = true
           break
         case 'wind':
           this.showFloatBall = true
-          this.data = windList
+          this.getFqList()
           this.isWind = true
           break
-        default:
-          this.showFloatBall = false
-          // this.data = waterList
-          this.isWater = true
       }
+    },
+    getRiverRealList () {
+      api.getRiverRealList()
+        .then((res) => {
+          if (res.status === success) {
+            this.data = this.convertRiverRealList(res.data)
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：List.vue')
+        })
+    },
+    getPptnRealList () {
+      api.getPptnRealList()
+        .then((res) => {
+          if (res.status === success) {
+            this.data = this.convertPptnRealList(res.data)
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：List.vue')
+        })
+    },
+    getFqList () {
+      api.getFqList()
+        .then((res) => {
+          if (res.status === success) {
+            console.log(res)
+            this.data = this.convertFqList(res.data)
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：List.vue')
+        })
     },
     convertRiverRealList (data) {
       let res = []
@@ -255,9 +104,11 @@ export default {
         let obj = {
           children: []
         }
-        obj.title = item.riverNmae
+        obj.stcd = item.stcd
+        obj.title = item.riverNmae ? item.riverNmae.trim() : ''
         obj.time = item.times
         obj.status = item.warnType
+        obj.timeType = item.timeType
         obj.children.push({
           title: '水位',
           value: item.z,
@@ -267,6 +118,59 @@ export default {
           title: '预警水位',
           value: item.warnValue,
           unit: 'm'
+        })
+        res.push(obj)
+      })
+      return res
+    },
+    convertPptnRealList (data) {
+      let res = []
+      data.forEach((item) => {
+        let obj = {
+          children: []
+        }
+        obj.stcd = item.stcd
+        obj.title = item.pptnNmae ? item.pptnNmae.trim() : ''
+        obj.time = item.times
+        obj.status = item.warnType
+        obj.timeType = item.timeType
+        obj.children.push({
+          title: '今日雨量',
+          value: item.dyp,
+          unit: 'mm'
+        })
+        obj.children.push({
+          title: '当年累计',
+          value: item.rainfall,
+          unit: 'mm'
+        })
+        res.push(obj)
+      })
+      return res
+    },
+    convertFqList (data) {
+      let res = []
+      data.forEach((item) => {
+        let obj = {
+          children: []
+        }
+        obj.stcd = item.stcd
+        obj.title = item.fqNmae ? item.riverNmae.trim() : ''
+        obj.time = item.times
+        obj.status = item.warnType
+        obj.timeType = item.timeType
+        obj.children.push({
+          title: '风速',
+          value: item.winSpeed,
+          unit: 'm/s'
+        })
+        obj.children.push({
+          title: '风力等级',
+          value: item.winGrade
+        })
+        obj.children.push({
+          title: '风向',
+          value: item.winDre
         })
         res.push(obj)
       })

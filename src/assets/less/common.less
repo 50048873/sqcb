@@ -18,4 +18,33 @@ body {
   overflow: auto;
 }
 
+.serverErrorTip {
+  position: fixed;
+  z-index: 9;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: @border-radius-s;
+  transition: opacity 0.4s;
+  max-width: 80%;
+  color: white;
+}
+
+.n-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  .desc {
+      margin-left: 4px;
+      line-height: 20px;
+      font-size: 12px;
+      color: @color-text;
+  }
+}
+
 @import './weuiReset.less';

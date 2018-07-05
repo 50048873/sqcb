@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 let toString = Object.prototype.toString
 
 export function isArray (arr) {
@@ -39,7 +41,7 @@ export function standardDate (data, key) {
           }
           if (curM === prevM) {
             obj[key] = curD
-            if (curD.indexOf(' ') > -1) {
+            if (isString(curD) && curD.indexOf(' ') > -1) {
               let _curD = curD.split(' ')
               let _prevD = prevD.split(' ')
               if (_curD[0] === _prevD[0]) {
@@ -74,4 +76,94 @@ export function getDataByKey (data, key) { // data: Array; key: String
     return arr
   }
   return data
+}
+
+// 全局loading
+let loadingImg = require('@/assets/img/loading.gif')
+export let loading = {
+  $loading: [],
+  show () {
+    let content = `<div class="n-loading">
+                      <img width="24" height="24" src="${loadingImg}">
+                      <span class="desc">请求中...</span>
+                  </div>`
+    this.$loading.push($(content).appendTo('body'))
+  },
+  remove () {
+    if (!this.$loading.length) return
+    let len = this.$loading.length
+    for (let i = 0; i < len; i++) {
+      this.$loading[i].remove()
+    }
+  }
+}
+
+// 提示
+export function hint (text) {
+  let content = `<div class="serverErrorTip animated fadeIn">${text}</div>`
+  if ($('body > .serverErrorTip').length) return
+  let $back = $(content).appendTo('body')
+  setTimeout(() => {
+    $back.removeClass('fadeIn').addClass('fadeOut')
+    $back.on('webkitanimationend animationend', () => {
+      $back.remove()
+      $back = null
+    })
+    setTimeout(() => {
+      let $serverError = $('.serverErrorTip')
+      if ($serverError.length) {
+        $serverError.remove()
+      }
+    }, 2000)
+  }, 2000)
+  return $back
+}
+
+// 服务器错误提示
+export function serverErrorTip (err, filename) {
+  let content = `<div class="serverErrorTip animated fadeIn"><p>错误状态码：${err.status}</p><p>错误描叙：${err.statusText}</p><p>错误文件：${filename}</p></div>`
+  if ($('body > .serverErrorTip').length) return
+  let $back = $(content).appendTo('body')
+  setTimeout(() => {
+    $back.removeClass('fadeIn').addClass('fadeOut')
+    $back.on('webkitanimationend animationend', () => {
+      $back.remove()
+      $back = null
+    })
+    setTimeout(() => {
+      let $serverError = $('.serverErrorTip')
+      if ($serverError.length) {
+        $serverError.remove()
+      }
+    }, 2000)
+  }, 2000)
+}
+
+// 获取指定日期
+/*
+  * addDayCount: 增减天数（Number）
+  * hour: 小时（Number）
+  * minute: 分（Number）
+  * second: 秒（Number）
+  * utc: 是否是UTC格式（Boolean）
+*/
+export function getDateStr (addDayCount, hour, minute, second, utc) {
+  let dd = new Date()
+  dd.setDate(dd.getDate() + addDayCount) // 获取AddDayCount天后的日期
+  let y = dd.getFullYear()
+  let m = (dd.getMonth() + 1)
+  let d = dd.getDate()
+  let reg = /^\d+$/
+  hour = reg.test(hour) ? hour.toString() : dd.getHours()
+  minute = reg.test(minute) ? minute.toString() : dd.getMinutes()
+  second = reg.test(second) ? second.toString() : dd.getSeconds()
+
+  m = m.toString().padStart(2, '0')
+  d = d.toString().padStart(2, '0')
+  hour = hour.toString().padStart(2, '0')
+  minute = minute.toString().padStart(2, '0')
+  second = second.toString().padStart(2, '0')
+
+  let divide = utc ? 'T' : ' '
+  return `${y}-${m}-${d}${divide}${hour}:${minute}:${second}`
 }
