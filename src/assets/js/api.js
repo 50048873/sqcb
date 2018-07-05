@@ -35,6 +35,13 @@ export let getPptnDetailData = (params) => {
   })
 }
 
+// 雨情详情
+export let getAllWarnList = (params) => {
+  return $.ajax({
+    url: baseUrl + '/hydr-web/dseStPptnRealController/getAllWarnList.do'
+  })
+}
+
 // 风情列表
 export let getFqList = () => {
   return $.ajax({

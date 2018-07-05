@@ -2,9 +2,9 @@
   <div class="WarnCondition fullScreen">
     <div class="weui-cells__title">什么情况下会报警？</div>
     <div class="weui-cells">
-      <div class="weui-cell" v-for="(item, index) in data" :key="index">
+      <div class="weui-cell" v-for="(value, key) in data" :key="key">
           <div class="weui-cell__bd">
-              <p>{{item.title}}</p>
+              <p>{{key.replace('warn', '')}}小时雨量超过{{value}}mm</p>
           </div>
       </div>
     </div>
@@ -12,27 +12,31 @@
 </template>
 
 <script>
-const data = [
-  {
-    title: '1小时雨量超过50mm'
-  },
-  {
-    title: '3小时雨量超过70mm'
-  },
-  {
-    title: '6小时雨量超过80mm'
-  },
-  {
-    title: '12小时雨量超过100mm'
-  },
-  {
-    title: '24小时雨量超过120mm'
-  }
-]
+import * as api from '@/assets/js/api'
+import {success} from '@/assets/js/config'
 export default {
   name: 'WarnCondition',
+  data () {
+    return {
+      data: []
+    }
+  },
+  methods: {
+    getAllWarnList () {
+      api.getAllWarnList()
+        .then((res) => {
+          if (res.status === success) {
+            this.data = res.data[0]
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：RainCondition.vue')
+        })
+    }
+  },
   created () {
-    this.data = data
+    this.getAllWarnList()
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="Water fullScreen">
-    <hui-list1 class="theme2" :data="data" theme="HuiList1-theme2" @list-click="listClick"></hui-list1>
+    <hui-list1 class="theme2" :data="data" theme="HuiList1-theme2" @list-click="listClick" @warn-click="warnClick"></hui-list1>
     <float-ball v-if="showFloatBall" right="15" bottom="15" @ball-click="ballClick">
       <hui-icon-normal-explain class="iconExplain" v-if="isRain"></hui-icon-normal-explain>
       <hui-icon-normal-wind class="iconExplain" v-if="isWind"></hui-icon-normal-wind>
@@ -35,6 +35,9 @@ export default {
     listClick (item, index) {
       const parentPath = this.$route.path
       this.$router.push({path: `${parentPath}/${item.stcd}`, query: {title: item.title}})
+    },
+    warnClick (item, index) {
+      console.log(item)
     },
     ballClick (iconClass) {
       const parentPath = this.$route.path

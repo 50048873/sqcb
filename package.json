@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "highcharts": "^6.1.0",
-    "hui": "http://localhost/5ds/hui/hui-1.0.0.tgz",
     "jquery": "^3.3.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
@@ -46,6 +45,7 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
+    "hui": "http://localhost/5ds/hui/hui-1.0.0.tgz",
     "husky": "^0.14.3",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",

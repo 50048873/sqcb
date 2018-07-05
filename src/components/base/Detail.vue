@@ -6,7 +6,7 @@
           <p>开始时间</p>
         </div>
         <div class="weui-cell__ft">
-          <input class="weui-input" v-model="beginDate" @change="getRiveDetailData" type="datetime-local" value="">
+          <input class="weui-input" v-model="beginDate" @change="searchData" type="datetime-local" value="">
         </div>
       </a>
       <a class="weui-cell weui-cell_access" href="javascript:;">
@@ -14,7 +14,7 @@
           <p>结束时间</p>
         </div>
         <div class="weui-cell__ft">
-          <input class="weui-input" v-model="endDate" @change="getRiveDetailData" type="datetime-local" value="">
+          <input class="weui-input" v-model="endDate" @change="searchData" type="datetime-local" value="">
         </div>
       </a>
     </div>
@@ -75,6 +75,19 @@ export default {
           break
         case 'rainDetail':
           this.yTitleText = '雨量（m）'
+          this.getPptnDetailData()
+          break
+        case 'windDetail':
+          break
+      }
+    },
+    searchData () {
+      const name = this.$route.name
+      switch (name) {
+        case 'waterDetail':
+          this.getRiveDetailData()
+          break
+        case 'rainDetail':
           this.getPptnDetailData()
           break
         case 'windDetail':
