@@ -13,7 +13,7 @@
 
 <script>
 import * as api from '@/assets/js/api'
-import {success} from '@/assets/js/config'
+import {success, noDataHintTxt} from '@/assets/js/config'
 export default {
   name: 'WarnCondition',
   data () {
@@ -26,7 +26,11 @@ export default {
       api.getAllWarnList()
         .then((res) => {
           if (res.status === success) {
-            this.data = res.data[0]
+            if (Array.isArray(res.data) && res.data.length) {
+              this.data = res.data[0]
+            } else {
+              this.hint(noDataHintTxt)
+            }
           } else {
             this.hint(res.msg)
           }

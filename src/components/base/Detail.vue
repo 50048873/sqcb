@@ -19,9 +19,9 @@
       </a>
     </div>
     <div class="tab-wrap">
-      <hui-tab1 :data="tabData" size="small" @tab-click="tabClick" v-if="data.length"></hui-tab1>
+      <hui-tab1 :data="tabData" size="small" @tab-click="tabClick" v-show="data.length"></hui-tab1>
       <highcharts-line class="highcharts" v-show="currentIndex === 0 && data.length" :yTitleText="yTitleText" :data="data"></highcharts-line>
-      <hui-table1 :data="data" v-show="currentIndex === 1">
+      <hui-table1 :data="data" v-show="currentIndex === 1 && data.length">
         <hui-table-column prop="time" label="时间"></hui-table-column>
         <hui-table-column prop="value" :label="yTitleText"></hui-table-column>
       </hui-table1>
@@ -32,9 +32,9 @@
 
 <script>
 import HighchartsLine from '@/components/base/HighchartsLine'
-import {getDateStr} from '@/assets/js/util'
+import {getDateStr, handleDecimalLength, standardDate} from '@/assets/js/util'
 import * as api from '@/assets/js/api'
-import {success} from '@/assets/js/config'
+import {success, noDataHintTxt} from '@/assets/js/config'
 export default {
   name: 'WaterDetail',
   components: {
@@ -47,7 +47,7 @@ export default {
   },
   data () {
     return {
-      beginDate: getDateStr(-365, '00', '00', null, true),
+      beginDate: getDateStr(-7, '00', '00', null, true),
       endDate: getDateStr(0, null, null, null, true),
       currentIndex: 0,
       tabData: [
@@ -78,6 +78,8 @@ export default {
           this.getPptnDetailData()
           break
         case 'windDetail':
+          this.yTitleText = '风速（m）'
+          this.getDseStFqRList()
           break
       }
     },
@@ -91,6 +93,7 @@ export default {
           this.getPptnDetailData()
           break
         case 'windDetail':
+          this.getDseStFqRList()
           break
       }
     },
@@ -103,16 +106,20 @@ export default {
       api.getRiveDetailData(params)
         .then((res) => {
           if (res.status === success) {
-            let convertedRes = []
             let data = res.data
-            data.forEach((item) => {
-              convertedRes.push({
-                stcd: item.stcd,
-                time: item.tm,
-                value: item.z
+            if (Array.isArray(data)) {
+              let convertedRes = []
+              data.forEach((item) => {
+                convertedRes.push({
+                  stcd: item.stcd,
+                  time: item.tm,
+                  value: handleDecimalLength(item.z)
+                })
               })
-            })
-            this.data = convertedRes
+              this.data = standardDate(convertedRes, 'time')
+            } else {
+              this.hint(noDataHintTxt)
+            }
           } else {
             this.hint(res.msg)
           }
@@ -129,16 +136,50 @@ export default {
       api.getPptnDetailData(params)
         .then((res) => {
           if (res.status === success) {
-            let convertedRes = []
             let data = res.data
-            data.forEach((item) => {
-              convertedRes.push({
-                stcd: item.stcd,
-                time: item.tm,
-                value: item.drp
+            if (Array.isArray(data)) {
+              let convertedRes = []
+              data.forEach((item) => {
+                convertedRes.push({
+                  stcd: item.stcd,
+                  time: item.tm,
+                  value: handleDecimalLength(item.drp)
+                })
               })
-            })
-            this.data = convertedRes
+              this.data = convertedRes
+            } else {
+              this.hint(noDataHintTxt)
+            }
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：Detail.vue')
+        })
+    },
+    getDseStFqRList () {
+      let params = {
+        stcd: this.id,
+        beginDate: this.beginDate.replace('T', ' '),
+        endDate: this.endDate.replace('T', ' ')
+      }
+      api.getDseStFqRList(params)
+        .then((res) => {
+          if (res.status === success) {
+            let data = res.data
+            if (Array.isArray(data)) {
+              let convertedRes = []
+              data.forEach((item) => {
+                convertedRes.push({
+                  stcd: item.stcd,
+                  time: item.detTime,
+                  value: handleDecimalLength(item.winSpeed)
+                })
+              })
+              this.data = convertedRes
+            } else {
+              this.hint(noDataHintTxt)
+            }
           } else {
             this.hint(res.msg)
           }

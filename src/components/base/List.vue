@@ -5,14 +5,21 @@
       <hui-icon-normal-explain class="iconExplain" v-if="isRain"></hui-icon-normal-explain>
       <hui-icon-normal-wind class="iconExplain" v-if="isWind"></hui-icon-normal-wind>
     </float-ball>
+    <hui-dialog
+      :title="dialog.title"
+      :visible.sync="dialog.visible"
+      width="80%"
+      cancel="关闭">
+      <p v-for="(value, key) in dialog.data" :key="key">{{value}}</p>
+    </hui-dialog>
   </div>
 </template>
 
 <script>
 import FloatBall from '@/components/base/FloatBall'
 import * as api from '@/assets/js/api'
-import {success} from '@/assets/js/config'
-import {loading} from '@/assets/js/util'
+import {success, noDataHintTxt} from '@/assets/js/config'
+import {loading, isObject, handleDecimalLength} from '@/assets/js/util'
 export default {
   name: 'Water',
   components: {
@@ -24,7 +31,12 @@ export default {
       data: [],
       isRain: false,
       isWind: false,
-      isWater: false
+      isWater: false,
+      dialog: {
+        visible: false,
+        title: '',
+        data: {}
+      }
     }
   },
   beforeRouteLeave (to, from, next) {
@@ -38,6 +50,23 @@ export default {
     },
     warnClick (item, index) {
       console.log(item)
+      api.getAllWarnListByStcd({stcd: item.stcd})
+        .then((res) => {
+          if (res.status === success) {
+            let data = res.data
+            if (isObject(data)) {
+              this.dialog.visible = true
+              this.dialog.title = item.title
+              this.dialog.data = data
+            } else {
+              this.hint(noDataHintTxt)
+            }
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：List.vue->getAllWarnListByStcd')
+        })
     },
     ballClick (iconClass) {
       const parentPath = this.$route.path
@@ -64,41 +93,72 @@ export default {
           break
       }
     },
-    getRiverRealList () {
-      api.getRiverRealList()
+    getAllWarnListByStcd (params) {
+      api.getAllWarnListByStcd(params)
         .then((res) => {
           if (res.status === success) {
-            this.data = this.convertRiverRealList(res.data)
+            let data = res.data
+            if (isObject(data)) {
+              this.dialog.data = data
+            } else {
+              this.hint(noDataHintTxt)
+            }
           } else {
             this.hint(res.msg)
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue')
+          this.serverErrorTip(err, '错误来源：List.vue->getAllWarnListByStcd')
+        })
+    },
+    getRiverRealList () {
+      api.getRiverRealList()
+        .then((res) => {
+          if (res.status === success) {
+            let data = res.data
+            if (Array.isArray(data)) {
+              this.data = this.convertRiverRealList(data)
+            } else {
+              this.hint(noDataHintTxt)
+            }
+          } else {
+            this.hint(res.msg)
+          }
+        }, (err) => {
+          this.serverErrorTip(err, '错误来源：List.vue->getRiverRealList')
         })
     },
     getPptnRealList () {
       api.getPptnRealList()
         .then((res) => {
           if (res.status === success) {
-            this.data = this.convertPptnRealList(res.data)
+            let data = res.data
+            if (Array.isArray(data)) {
+              this.data = this.convertPptnRealList(data)
+            } else {
+              this.hint(noDataHintTxt)
+            }
           } else {
             this.hint(res.msg)
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue')
+          this.serverErrorTip(err, '错误来源：List.vue->getPptnRealList')
         })
     },
     getFqList () {
       api.getFqList()
         .then((res) => {
           if (res.status === success) {
-            console.log(res)
-            this.data = this.convertFqList(res.data)
+            let data = res.data
+            if (Array.isArray(data)) {
+              this.data = this.convertFqList(data)
+            } else {
+              this.hint(noDataHintTxt)
+            }
           } else {
             this.hint(res.msg)
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue')
+          this.serverErrorTip(err, '错误来源：List.vue->getFqList')
         })
     },
     convertRiverRealList (data) {
@@ -114,12 +174,12 @@ export default {
         obj.timeType = item.timeType
         obj.children.push({
           title: '水位',
-          value: item.z,
+          value: handleDecimalLength(item.z),
           unit: 'm'
         })
         obj.children.push({
           title: '预警水位',
-          value: item.warnValue,
+          value: handleDecimalLength(item.warnValue),
           unit: 'm'
         })
         res.push(obj)
@@ -139,12 +199,12 @@ export default {
         obj.timeType = item.timeType
         obj.children.push({
           title: '今日雨量',
-          value: item.dyp,
+          value: handleDecimalLength(item.dyp),
           unit: 'mm'
         })
         obj.children.push({
           title: '当年累计',
-          value: item.rainfall,
+          value: handleDecimalLength(item.rainfall),
           unit: 'mm'
         })
         res.push(obj)
@@ -164,16 +224,16 @@ export default {
         obj.timeType = item.timeType
         obj.children.push({
           title: '风速',
-          value: item.winSpeed,
+          value: handleDecimalLength(item.winSpeed),
           unit: 'm/s'
         })
         obj.children.push({
           title: '风力等级',
-          value: item.winGrade
+          value: handleDecimalLength(item.winGrade)
         })
         obj.children.push({
           title: '风向',
-          value: item.winDre
+          value: handleDecimalLength(item.winDre)
         })
         res.push(obj)
       })

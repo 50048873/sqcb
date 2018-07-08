@@ -81,8 +81,9 @@ const router = new Router({
       path: '/wind/:id',
       name: 'windDetail',
       props: true,
-      beforeEnter: (to, from, next) => {
-        next(false)
+      component: Detail,
+      meta: {
+        title: '风情信息'
       }
     }
   ]

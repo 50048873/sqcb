@@ -6,24 +6,27 @@ export function isArray (arr) {
   return toString.call(arr) === '[object Array]'
 }
 
+export function isObject (obj) {
+  return toString.call(obj) === '[object Object]'
+}
+
 export function isString (str) {
   return toString.call(str) === '[object String]'
 }
 
+export function isNumber (num) {
+  return toString.call(num) === '[object Number]'
+}
+
 // 按数组对象里的日期格式化成标准
 export function standardDate (data, key) {
+  data = data.slice()
+  console.log(JSON.stringify(data, null, 2))
   if (isArray(data) && data.length) {
-    data.forEach((item) => {
-      let index = item[key].indexOf(':')
-      if (index > -1) {
-        item[key] = item[key].substr(0, index)
-      }
-    })
     let res = []
-    res.push(Object.assign({}, data[0]))
+    res.push(data[0])
     data.reduce((prev, cur, index) => {
-      let obj = {}
-      obj.value = cur[key]
+      let obj = Object.assign({}, cur)
       if (isString(prev[key]) && prev[key].indexOf('-')) {
         let prevArr = prev[key].split('-')
         let curArr = cur[key].split('-')
@@ -58,19 +61,17 @@ export function standardDate (data, key) {
       res.push(obj)
       return cur
     })
+    console.log(JSON.stringify(res, null, 2))
     return res
   }
   return data
 }
 
-export function getDataByKey (data, key) { // data: Array; key: String
+export function getDataByKey (data, key, isString = true) { // data: Array; key: String
   let arr = []
   if (isArray(data) && data.length) {
     data.forEach((item) => {
-      let val = item[key]
-      if (key === 'y') {
-        val = parseFloat(val)
-      }
+      let val = isString ? item[key] : parseFloat(item[key])
       arr.push(val)
     })
     return arr
@@ -114,8 +115,8 @@ export function hint (text) {
       if ($serverError.length) {
         $serverError.remove()
       }
-    }, 2000)
-  }, 2000)
+    }, 3000)
+  }, 3000)
   return $back
 }
 
@@ -135,8 +136,8 @@ export function serverErrorTip (err, filename) {
       if ($serverError.length) {
         $serverError.remove()
       }
-    }, 2000)
-  }, 2000)
+    }, 3000)
+  }, 3000)
 }
 
 // 获取指定日期
@@ -166,4 +167,12 @@ export function getDateStr (addDayCount, hour, minute, second, utc) {
 
   let divide = utc ? 'T' : ' '
   return `${y}-${m}-${d}${divide}${hour}:${minute}:${second}`
+}
+
+// 保留n位小数
+export function handleDecimalLength (num, len = 2) {
+  if (!isNumber(num)) {
+    num = parseFloat(num)
+  }
+  return num.toFixed(len)
 }

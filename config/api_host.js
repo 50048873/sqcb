@@ -7,6 +7,6 @@
 // const baseUrl = "http://www.whdse.cn:56012"
 
 module.exports = {
-  prod: '"http://10.100.50.187:8080"',
+  prod: '"http://www.whdse.cn:56012"',
   dev: '"/api"'
 }

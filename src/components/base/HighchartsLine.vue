@@ -4,7 +4,7 @@
 
 <script>
 import Highcharts from 'highcharts/highstock'
-import {getDataByKey, standardDate} from '@/assets/js/util'
+import {getDataByKey} from '@/assets/js/util'
 import {chart} from '@/assets/js/mixin'
 
 export default {
@@ -30,8 +30,8 @@ export default {
   mixins: [chart],
   methods: {
     draw () {
-      let categories = getDataByKey(standardDate(this.data, 'time'), 'time')
-      let data = getDataByKey(this.data, 'value')
+      let categories = getDataByKey(this.data, 'time')
+      let data = getDataByKey(this.data, 'value', false)
       let options = {
         credits: {
           enabled: false

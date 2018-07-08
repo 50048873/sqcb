@@ -35,7 +35,15 @@ export let getPptnDetailData = (params) => {
   })
 }
 
-// 雨情详情
+//  预警详细
+export let getAllWarnListByStcd = (params) => {
+  return $.ajax({
+    url: baseUrl + '/hydr-web/dseStPptnRealController/getAllWarnListByStcd.do',
+    data: params
+  })
+}
+
+// 获取所有的预警信息
 export let getAllWarnList = (params) => {
   return $.ajax({
     url: baseUrl + '/hydr-web/dseStPptnRealController/getAllWarnList.do'
@@ -46,5 +54,15 @@ export let getAllWarnList = (params) => {
 export let getFqList = () => {
   return $.ajax({
     url: baseUrl + '/hydr-web/dseStFqRealController/getFqList.do'
+  })
+}
+
+// 风情详情
+export let getDseStFqRList = (params) => {
+  return $.ajax({
+    url: baseUrl + '/hydr-web/dseStFqRController/getDseStFqRList.do',
+    method: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(params)
   })
 }
