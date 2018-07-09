@@ -22,7 +22,6 @@ import {hint, serverErrorTip} from '@/assets/js/util'
 
 // 注册Hui组件
 Vue.use(Hui.all)
-Vue.use(Hui.useIcon)
 
 // 注册全局组件
 Vue.component('no-data', NoData)
