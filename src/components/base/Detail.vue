@@ -43,6 +43,9 @@ export default {
   props: {
     id: {
       type: String
+    },
+    name: {
+      type: String
     }
   },
   data () {
@@ -67,8 +70,7 @@ export default {
       this.currentIndex = index
     },
     handleType () {
-      const name = this.$route.name
-      switch (name) {
+      switch (this.name) {
         case 'waterDetail':
           this.yTitleText = '水位（m）'
           this.getRiveDetailData()
@@ -84,8 +86,7 @@ export default {
       }
     },
     searchData () {
-      const name = this.$route.name
-      switch (name) {
+      switch (this.name) {
         case 'waterDetail':
           this.getRiveDetailData()
           break
@@ -146,7 +147,7 @@ export default {
                   value: handleDecimalLength(item.drp)
                 })
               })
-              this.data = convertedRes
+              this.data = standardDate(convertedRes, 'time')
             } else {
               this.hint(noDataHintTxt)
             }
@@ -176,7 +177,7 @@ export default {
                   value: handleDecimalLength(item.winSpeed)
                 })
               })
-              this.data = convertedRes
+              this.data = standardDate(convertedRes, 'time')
             } else {
               this.hint(noDataHintTxt)
             }

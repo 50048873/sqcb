@@ -21,7 +21,6 @@ export function isNumber (num) {
 // 按数组对象里的日期格式化成标准
 export function standardDate (data, key) {
   data = data.slice()
-  console.log(JSON.stringify(data, null, 2))
   if (isArray(data) && data.length) {
     let res = []
     res.push(data[0])
@@ -61,7 +60,6 @@ export function standardDate (data, key) {
       res.push(obj)
       return cur
     })
-    console.log(JSON.stringify(res, null, 2))
     return res
   }
   return data

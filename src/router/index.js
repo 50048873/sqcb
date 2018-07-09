@@ -30,7 +30,12 @@ const router = new Router({
     {
       path: '/water/:id',
       name: 'waterDetail',
-      props: true,
+      props: (route) => {
+        return {
+          id: route.params.id,
+          name: route.name
+        }
+      },
       component: Detail,
       meta: {
         title: '水位信息'
@@ -55,7 +60,12 @@ const router = new Router({
     {
       path: '/rain/:id',
       name: 'rainDetail',
-      props: true,
+      props: (route) => {
+        return {
+          id: route.params.id,
+          name: route.name
+        }
+      },
       component: Detail,
       meta: {
         title: '雨位信息'
@@ -80,7 +90,12 @@ const router = new Router({
     {
       path: '/wind/:id',
       name: 'windDetail',
-      props: true,
+      props: (route) => {
+        return {
+          id: route.params.id,
+          name: route.name
+        }
+      },
       component: Detail,
       meta: {
         title: '风情信息'
