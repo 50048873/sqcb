@@ -152,7 +152,7 @@ export function convertWindDrection (deg) {
   deg = parseInt(deg)
   console.log(deg)
   let direction
-  if ((deg >= 350 && deg <=360) || (deg >= 0 && deg <= 10)) {
+  if ((deg >= 350 && deg <= 360) || (deg >= 0 && deg <= 10)) {
     direction = '正北'
   } else if (deg >= 80 && deg <= 100) {
     direction = '正东'
