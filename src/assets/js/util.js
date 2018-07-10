@@ -97,47 +97,6 @@ export let loading = {
   }
 }
 
-// 提示
-export function hint (text) {
-  let content = `<div class="serverErrorTip animated fadeIn">${text}</div>`
-  if ($('body > .serverErrorTip').length) return
-  let $back = $(content).appendTo('body')
-  setTimeout(() => {
-    $back.removeClass('fadeIn').addClass('fadeOut')
-    $back.on('webkitanimationend animationend', () => {
-      $back.remove()
-      $back = null
-    })
-    setTimeout(() => {
-      let $serverError = $('.serverErrorTip')
-      if ($serverError.length) {
-        $serverError.remove()
-      }
-    }, 3000)
-  }, 3000)
-  return $back
-}
-
-// 服务器错误提示
-export function serverErrorTip (err, filename) {
-  let content = `<div class="serverErrorTip animated fadeIn"><p>错误状态码：${err.status}</p><p>错误描叙：${err.statusText}</p><p>错误文件：${filename}</p></div>`
-  if ($('body > .serverErrorTip').length) return
-  let $back = $(content).appendTo('body')
-  setTimeout(() => {
-    $back.removeClass('fadeIn').addClass('fadeOut')
-    $back.on('webkitanimationend animationend', () => {
-      $back.remove()
-      $back = null
-    })
-    setTimeout(() => {
-      let $serverError = $('.serverErrorTip')
-      if ($serverError.length) {
-        $serverError.remove()
-      }
-    }, 3000)
-  }, 3000)
-}
-
 // 获取指定日期
 /*
   * addDayCount: 增减天数（Number）
@@ -155,22 +114,62 @@ export function getDateStr (addDayCount, hour, minute, second, utc) {
   let reg = /^\d+$/
   hour = reg.test(hour) ? hour.toString() : dd.getHours()
   minute = reg.test(minute) ? minute.toString() : dd.getMinutes()
-  second = reg.test(second) ? second.toString() : dd.getSeconds()
 
   m = m.toString().padStart(2, '0')
   d = d.toString().padStart(2, '0')
   hour = hour.toString().padStart(2, '0')
   minute = minute.toString().padStart(2, '0')
-  second = second.toString().padStart(2, '0')
 
   let divide = utc ? 'T' : ' '
-  return `${y}-${m}-${d}${divide}${hour}:${minute}:${second}`
+
+  if (second === null || second === undefined || second === false || second === '') {
+    return `${y}-${m}-${d}${divide}${hour}:${minute}`
+  } else {
+    second = reg.test(second) ? second.toString() : dd.getSeconds()
+    second = second.toString().padStart(2, '0')
+    return `${y}-${m}-${d}${divide}${hour}:${minute}:${second}`
+  }
 }
 
 // 保留n位小数
-export function handleDecimalLength (num, len = 2) {
+export function handleDecimalLength (num, len) {
+  if (!/^\d+$/.test(len)) {
+    len = 2
+  }
   if (!isNumber(num)) {
     num = parseFloat(num)
   }
   return num.toFixed(len)
+}
+
+// 返回服务器错误信息html字符串
+export function getServerErrorMessageAsHtml (err, filename) {
+  return `<div style="text-align:left"><p>错误状态码：${err.status}</p><p>错误描叙：${err.statusText}</p><p>错误来源：${filename}</p></div>`
+}
+
+// 转换风情等级
+export function convertWindDrection (deg) {
+  deg = parseInt(deg)
+  console.log(deg)
+  let direction
+  if ((deg >= 350 && deg <=360) || (deg >= 0 && deg <= 10)) {
+    direction = '正北'
+  } else if (deg >= 80 && deg <= 100) {
+    direction = '正东'
+  } else if (deg >= 170 && deg <= 190) {
+    direction = '正南'
+  } else if (deg >= 260 && deg <= 280) {
+    direction = '正西'
+  } else {
+    if (deg > 10 && deg < 80) {
+      direction = '东北'
+    } else if (deg > 100 && deg < 170) {
+      direction = '东南'
+    } else if (deg > 190 && deg < 260) {
+      direction = '西南'
+    } else if (deg > 280 && deg < 350) {
+      direction = '西北'
+    }
+  }
+  return direction
 }

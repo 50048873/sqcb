@@ -19,7 +19,7 @@
 import FloatBall from '@/components/base/FloatBall'
 import * as api from '@/assets/js/api'
 import {success, noDataHintTxt} from '@/assets/js/config'
-import {loading, isObject, handleDecimalLength} from '@/assets/js/util'
+import {loading, isObject, handleDecimalLength, getServerErrorMessageAsHtml, convertWindDrection} from '@/assets/js/util'
 export default {
   name: 'Water',
   components: {
@@ -49,7 +49,6 @@ export default {
       this.$router.push({path: `${parentPath}/${item.stcd}`, query: {title: item.title}})
     },
     warnClick (item, index) {
-      console.log(item)
       api.getAllWarnListByStcd({stcd: item.stcd})
         .then((res) => {
           if (res.status === success) {
@@ -59,13 +58,13 @@ export default {
               this.dialog.title = item.title
               this.dialog.data = data
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue->getAllWarnListByStcd')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'List.vue->getAllWarnListByStcd'), icon: 'hui-warn'})
         })
     },
     ballClick (iconClass) {
@@ -93,23 +92,6 @@ export default {
           break
       }
     },
-    getAllWarnListByStcd (params) {
-      api.getAllWarnListByStcd(params)
-        .then((res) => {
-          if (res.status === success) {
-            let data = res.data
-            if (isObject(data)) {
-              this.dialog.data = data
-            } else {
-              this.hint(noDataHintTxt)
-            }
-          } else {
-            this.hint(res.msg)
-          }
-        }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue->getAllWarnListByStcd')
-        })
-    },
     getRiverRealList () {
       api.getRiverRealList()
         .then((res) => {
@@ -118,13 +100,13 @@ export default {
             if (Array.isArray(data)) {
               this.data = this.convertRiverRealList(data)
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue->getRiverRealList')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'List.vue->getRiverRealList'), icon: 'hui-warn'})
         })
     },
     getPptnRealList () {
@@ -135,13 +117,13 @@ export default {
             if (Array.isArray(data)) {
               this.data = this.convertPptnRealList(data)
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue->getPptnRealList')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'List.vue->getPptnRealList'), icon: 'hui-warn'})
         })
     },
     getFqList () {
@@ -152,13 +134,13 @@ export default {
             if (Array.isArray(data)) {
               this.data = this.convertFqList(data)
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：List.vue->getFqList')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'List.vue->getFqList'), icon: 'hui-warn'})
         })
     },
     convertRiverRealList (data) {
@@ -199,12 +181,12 @@ export default {
         obj.timeType = item.timeType
         obj.children.push({
           title: '今日雨量',
-          value: handleDecimalLength(item.dyp),
+          value: handleDecimalLength(item.dyp, 1),
           unit: 'mm'
         })
         obj.children.push({
           title: '当年累计',
-          value: handleDecimalLength(item.rainfall),
+          value: handleDecimalLength(item.rainfall, 0),
           unit: 'mm'
         })
         res.push(obj)
@@ -218,22 +200,22 @@ export default {
           children: []
         }
         obj.stcd = item.stcd
-        obj.title = item.fqNmae ? item.riverNmae.trim() : ''
+        obj.title = item.fqNmae ? item.fqNmae.trim() : ''
         obj.time = item.times
         obj.status = item.warnType
         obj.timeType = item.timeType
         obj.children.push({
           title: '风速',
-          value: handleDecimalLength(item.winSpeed),
+          value: handleDecimalLength(item.winSpeed, 0),
           unit: 'm/s'
         })
         obj.children.push({
           title: '风力等级',
-          value: handleDecimalLength(item.winGrade)
+          value: handleDecimalLength(item.winGrade, 0)
         })
         obj.children.push({
           title: '风向',
-          value: handleDecimalLength(item.winDre)
+          value: convertWindDrection(item.winDre)
         })
         res.push(obj)
       })

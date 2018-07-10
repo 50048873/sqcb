@@ -1,5 +1,5 @@
 <template>
-  <div class="highcharts-wrap"></div>
+  <div class="highcharts-wrap line-top line-bottom"></div>
 </template>
 
 <script>
@@ -22,13 +22,9 @@ export default {
     data: {
       type: Array
     },
-    maxScroll: { // 显示滚动条的最大阈值
+    maxScroll: {
       type: [String, Number],
       default: 10
-    },
-    tickInterval: { // x轴显示数据间隔（即每隔多少条数据显示一条数据）
-      type: [String, Number],
-      default: 0
     }
   },
   mixins: [chart],
@@ -51,7 +47,6 @@ export default {
           },
           max: categories.length <= this.maxScroll ? categories.length - 1 : this.maxScroll - 1,
           categories: categories,
-          tickInterval: this.tickInterval,
           title: {
             text: this.xTitleText,
             align: 'high'
@@ -62,11 +57,11 @@ export default {
           tickWidth: 1,
           title: {
             text: this.yTitleText,
-            align: 'high'
-            // offset: -20,
-            // rotation: 0,
-            // x: 2,
-            // y: -20
+            align: 'high',
+            offset: -20,
+            rotation: 0,
+            x: 2,
+            y: -20
           }
         },
         legend: {
@@ -109,7 +104,7 @@ export default {
 <style lang="less">
 .highcharts-wrap {
   .highcharts-container {
-    // padding-top: 20px;
+    padding-top: 20px;
     overflow: visible!important;
   }
   svg {

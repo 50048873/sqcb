@@ -14,6 +14,7 @@
 <script>
 import * as api from '@/assets/js/api'
 import {success, noDataHintTxt} from '@/assets/js/config'
+import {getServerErrorMessageAsHtml} from '@/assets/js/util'
 export default {
   name: 'WarnCondition',
   data () {
@@ -29,13 +30,13 @@ export default {
             if (Array.isArray(res.data) && res.data.length) {
               this.data = res.data[0]
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：RainCondition.vue')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'RainCondition.vue->getAllWarnList'), icon: 'hui-warn'})
         })
     }
   },

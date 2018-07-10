@@ -17,18 +17,11 @@ import 'hui/src/assets/font-hui/style.css'
 // 注册全局组件
 import NoData from '@/components/base/NoData'
 
-// 注册自定义的方法
-import {hint, serverErrorTip} from '@/assets/js/util'
-
 // 注册Hui组件
 Vue.use(Hui.all)
 
 // 注册全局组件
 Vue.component('no-data', NoData)
-
-// 注册自定义的方法
-Vue.prototype.hint = hint
-Vue.prototype.serverErrorTip = serverErrorTip
 
 Vue.config.productionTip = false
 

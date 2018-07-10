@@ -20,8 +20,25 @@
     </div>
     <div class="tab-wrap">
       <hui-tab1 :data="tabData" size="small" @tab-click="tabClick" v-show="data.length"></hui-tab1>
-      <highcharts-line class="highcharts" v-show="currentIndex === 0 && data.length" :yTitleText="yTitleText" :data="data"></highcharts-line>
-      <hui-table1 :data="data" v-show="currentIndex === 1 && data.length">
+      <div class="chart-wrap" v-if="currentIndex === 0 && data.length">
+        <highcharts-line
+          v-if="name==='waterDetail' || name==='windDetail'"
+          :data="data"
+          :tickInterval="parseInt(data.length/10)"
+          maxScroll="10000000" class="highcharts"
+          :yTitleText="yTitleText"
+        >
+        </highcharts-line>
+        <highcharts-column
+          v-if="name==='rainDetail'"
+          :data="data"
+          :tickInterval="parseInt(data.length/10)"
+          maxScroll="10000000"
+          :yTitleText="yTitleText"
+        >
+        </highcharts-column>
+      </div>
+      <hui-table1 class="hui-table1-time" :data="data" v-if="currentIndex === 1 && data.length">
         <hui-table-column prop="time" label="时间"></hui-table-column>
         <hui-table-column prop="value" :label="yTitleText"></hui-table-column>
       </hui-table1>
@@ -32,13 +49,15 @@
 
 <script>
 import HighchartsLine from '@/components/base/HighchartsLine'
-import {getDateStr, handleDecimalLength, standardDate} from '@/assets/js/util'
+import HighchartsColumn from '@/components/base/HighchartsColumn'
+import {getDateStr, handleDecimalLength, getServerErrorMessageAsHtml} from '@/assets/js/util'
 import * as api from '@/assets/js/api'
 import {success, noDataHintTxt} from '@/assets/js/config'
 export default {
   name: 'WaterDetail',
   components: {
-    HighchartsLine
+    HighchartsLine,
+    HighchartsColumn
   },
   props: {
     id: {
@@ -117,15 +136,25 @@ export default {
                   value: handleDecimalLength(item.z)
                 })
               })
-              this.data = standardDate(convertedRes, 'time')
+              // convertedRes.unshift({
+              //   stcd: null,
+              //   time: this.beginDate.replace('T', ' '),
+              //   value: null
+              // })
+              // convertedRes.push({
+              //   stcd: null,
+              //   time: this.endDate.replace('T', ' '),
+              //   value: null
+              // })
+              this.data = convertedRes
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：Detail.vue')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'Detail.vue->getRiveDetailData'), icon: 'hui-warn'})
         })
     },
     getPptnDetailData () {
@@ -144,18 +173,18 @@ export default {
                 convertedRes.push({
                   stcd: item.stcd,
                   time: item.tm,
-                  value: handleDecimalLength(item.drp)
+                  value: handleDecimalLength(item.drp, 1)
                 })
               })
-              this.data = standardDate(convertedRes, 'time')
+              this.data = convertedRes
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：Detail.vue')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'Detail.vue->getPptnDetailData'), icon: 'hui-warn'})
         })
     },
     getDseStFqRList () {
@@ -177,15 +206,15 @@ export default {
                   value: handleDecimalLength(item.winSpeed)
                 })
               })
-              this.data = standardDate(convertedRes, 'time')
+              this.data = convertedRes
             } else {
-              this.hint(noDataHintTxt)
+              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
-            this.hint(res.msg)
+            this.$message({content: res.msg, icon: 'hui-warn'})
           }
         }, (err) => {
-          this.serverErrorTip(err, '错误来源：Detail.vue')
+          this.$message({content: getServerErrorMessageAsHtml(err, 'Detail.vue->getDseStFqRList'), icon: 'hui-warn'})
         })
     }
   },
@@ -205,11 +234,35 @@ export default {
   .tab-wrap {
     margin: @margin-primary;
     .highcharts {
-      border: 1px solid #eee;
+      // border: 1px solid #eee;
       padding-top: 15px;
       padding-bottom: 15px;
       background-color: white;
     }
   }
+  .chart-wrap {
+    padding-top: 10px;
+    background-color: white;
+  }
 }
+</style>
+
+<style lang="less">
+  .hui-table1-time {
+    tr {
+      td:first-child {
+        span {
+          display: inline-block;
+          min-width: 9em;
+          text-align: right;
+        }
+      }
+      td:last-child {
+        span {
+          display: inline-block;
+          min-width: 5em;
+        }
+      }
+    }
+  }
 </style>
