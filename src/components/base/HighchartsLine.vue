@@ -4,58 +4,52 @@
 
 <script>
 import Highcharts from 'highcharts/highstock'
-import {getDataByKey} from '@/assets/js/util'
 import {chart} from '@/assets/js/mixin'
 
 export default {
   name: 'HighchartsColumn',
   props: {
-    title: {
-      type: String
-    },
     yTitleText: {
       type: String
     },
-    xTitleText: {
+    title: {
       type: String
     },
     data: {
-      type: Array
+      type: Array,
+      required: true
     },
-    maxScroll: { // 显示滚动条的最大阈值
-      type: [String, Number],
-      default: 10
-    },
-    tickInterval: { // x轴显示数据间隔（即每隔多少条数据显示一条数据）
-      type: [String, Number],
-      default: 0
+    pointStart: {
+      required: true
     }
   },
   mixins: [chart],
   methods: {
     draw () {
-      let categories = getDataByKey(this.data, 'time')
-      let data = getDataByKey(this.data, 'value', false)
       let options = {
+        title: {
+          text: this.title,
+          style: {fontSize: '14px'}
+        },
         credits: {
           enabled: false
         },
-        title: {
-          text: this.title,
-          style: {fontSize: '14px'},
-          y: 15
-        },
         xAxis: {
-          scrollbar: {
-            enabled: !(categories.length <= this.maxScroll)
+          type: 'datetime',
+          labels: {
+            rotation: -70,
+            x: 10,
+            formatter: function () {
+              let date = new Date(this.value)
+              let y = date.getFullYear()
+              let m = (date.getMonth() + 1).toString().padStart(2, '0')
+              let d = date.getDate().toString().padStart(2, '0')
+              let hour = date.getHours().toString().padStart(2, '0')
+              let minute = date.getMinutes().toString().padStart(2, '0')
+              return `${y}-${m}-${d} ${hour}:${minute}`
+            }
           },
-          max: categories.length <= this.maxScroll ? categories.length - 1 : this.maxScroll - 1,
-          categories: categories,
-          tickInterval: this.tickInterval,
-          title: {
-            text: this.xTitleText,
-            align: 'high'
-          }
+          tickPixelInterval: 50
         },
         yAxis: {
           lineWidth: 1,
@@ -63,42 +57,25 @@ export default {
           title: {
             text: this.yTitleText,
             align: 'high'
-            // offset: -20,
-            // rotation: 0,
-            // x: 2,
-            // y: -20
           }
+        },
+        tooltip: {
+          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+          '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
+          footerFormat: '</table>',
+          shared: true,
+          useHTML: true
         },
         legend: {
           enabled: false
         },
-        /* plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
-                    },
-                    pointStart: 0 //设置x轴起始数
-                }
-              }, */
         series: [{
-          name: '水位',
-          data: data,
-          color: '#1b9ce4'
-        }],
-        responsive: {
-          rules: [{
-            condition: {
-              maxWidth: 500
-            },
-            chartOptions: {
-              legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom'
-              }
-            }
-          }]
-        }
+          name: this.title,
+          data: this.data,
+          pointStart: new Date(this.pointStart) * 1,
+          pointInterval: 60 * 60 * 1000 // one hour
+        }]
       }
       this.chart = new Highcharts.Chart(this.$el, options)
     }

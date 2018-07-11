@@ -19,38 +19,36 @@
       </a>
     </div>
     <div class="tab-wrap">
-      <hui-tab1 :data="tabData" size="small" @tab-click="tabClick" v-show="data.length"></hui-tab1>
-      <div class="chart-wrap" v-if="currentIndex === 0 && data.length">
+      <hui-tab1 :data="tabData" size="small" @tab-click="tabClick" v-show="tableData.length"></hui-tab1>
+      <div class="chart-wrap" v-if="currentIndex === 0 && tableData.length">
         <highcharts-line
           v-if="name==='waterDetail' || name==='windDetail'"
-          :data="data"
-          :tickInterval="parseInt(data.length/10)"
-          maxScroll="10000000" class="highcharts"
-          :yTitleText="yTitleText"
+          :data="chartData"
+          :pointStart="this.beginDate"
+          :title="title"
         >
         </highcharts-line>
         <highcharts-column
           v-if="name==='rainDetail'"
-          :data="data"
-          :tickInterval="parseInt(data.length/10)"
-          maxScroll="10000000"
-          :yTitleText="yTitleText"
+          :data="chartData"
+          :pointStart="this.beginDate"
+          :title="title"
         >
         </highcharts-column>
       </div>
-      <hui-table1 class="hui-table1-time" :data="data" v-if="currentIndex === 1 && data.length">
+      <hui-table1 class="hui-table1-time" :data="tableData" v-if="currentIndex === 1 && tableData.length">
         <hui-table-column prop="time" label="时间"></hui-table-column>
-        <hui-table-column prop="value" :label="yTitleText"></hui-table-column>
+        <hui-table-column prop="value" :label="title"></hui-table-column>
       </hui-table1>
     </div>
-    <no-data v-if="!data.length"></no-data>
+    <no-data v-if="!tableData.length"></no-data>
   </div>
 </template>
 
 <script>
 import HighchartsLine from '@/components/base/HighchartsLine'
 import HighchartsColumn from '@/components/base/HighchartsColumn'
-import {getDateStr, handleDecimalLength, getServerErrorMessageAsHtml} from '@/assets/js/util'
+import {getDateStr, handleDecimalLength, getServerErrorMessageAsHtml, padEmptyData} from '@/assets/js/util'
 import * as api from '@/assets/js/api'
 import {success, noDataHintTxt} from '@/assets/js/config'
 export default {
@@ -80,8 +78,9 @@ export default {
           'title': '表格'
         }
       ],
-      data: [],
-      yTitleText: '水位（m）'
+      tableData: [],
+      chartData: [],
+      title: '水位（m）'
     }
   },
   methods: {
@@ -91,15 +90,15 @@ export default {
     searchData () {
       switch (this.name) {
         case 'waterDetail':
-          this.yTitleText = '水位（m）'
+          this.title = '水位（m）'
           this.getRiveDetailData()
           break
         case 'rainDetail':
-          this.yTitleText = '雨量（m）'
+          this.title = '雨量（m）'
           this.getPptnDetailData()
           break
         case 'windDetail':
-          this.yTitleText = '风速（m）'
+          this.title = '风速（m）'
           this.getDseStFqRList()
           break
       }
@@ -118,23 +117,18 @@ export default {
               let convertedRes = []
               data.forEach((item) => {
                 convertedRes.push({
-                  stcd: item.stcd,
+                  // stcd: item.stcd,
                   time: item.tm,
                   value: handleDecimalLength(item.z)
                 })
               })
-              // convertedRes.unshift({
-              //   stcd: null,
-              //   time: this.beginDate.replace('T', ' '),
-              //   value: null
-              // })
-              // convertedRes.push({
-              //   stcd: null,
-              //   time: this.endDate.replace('T', ' '),
-              //   value: null
-              // })
-              console.log(JSON.stringify(convertedRes, null, 2))
-              this.data = convertedRes
+              let padRes = padEmptyData({
+                startTime: this.beginDate,
+                endTime: this.endDate,
+                data: convertedRes
+              })
+              this.tableData = convertedRes
+              this.chartData = padRes
             } else {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
@@ -159,12 +153,17 @@ export default {
               let convertedRes = []
               data.forEach((item) => {
                 convertedRes.push({
-                  stcd: item.stcd,
                   time: item.tm,
                   value: handleDecimalLength(item.drp, 1)
                 })
               })
-              this.data = convertedRes
+              let padRes = padEmptyData({
+                startTime: this.beginDate,
+                endTime: this.endDate,
+                data: convertedRes
+              })
+              this.tableData = convertedRes
+              this.chartData = padRes
             } else {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
@@ -189,12 +188,17 @@ export default {
               let convertedRes = []
               data.forEach((item) => {
                 convertedRes.push({
-                  stcd: item.stcd,
                   time: item.detTime,
                   value: handleDecimalLength(item.winSpeed)
                 })
               })
-              this.data = convertedRes
+              let padRes = padEmptyData({
+                startTime: this.beginDate,
+                endTime: this.endDate,
+                data: convertedRes
+              })
+              this.tableData = convertedRes
+              this.chartData = padRes
             } else {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }

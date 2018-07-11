@@ -150,7 +150,6 @@ export function getServerErrorMessageAsHtml (err, filename) {
 // 转换风情等级
 export function convertWindDrection (deg) {
   deg = parseInt(deg)
-  console.log(deg)
   let direction
   if ((deg >= 350 && deg <= 360) || (deg >= 0 && deg <= 10)) {
     direction = '正北'
@@ -175,3 +174,23 @@ export function convertWindDrection (deg) {
 }
 
 // 补充起止日期的空数据
+export function padEmptyData ({startTime, endTime, intervalTime = 60 * 60 * 1000, data}) {
+  startTime = new Date(startTime) * 1
+  endTime = new Date(endTime) * 1
+  let diff = endTime - startTime
+  let count = parseInt(diff / intervalTime)
+  let i = 0
+  let j = 0
+  let res = []
+  while (i <= count) {
+    let currentTime = startTime + intervalTime * i
+    if (currentTime === (data[j] && new Date(data[j].time.replace(/:\d{2}/, ':00')) * 1)) {
+      res.push(parseFloat(data[j].value))
+      j++
+    } else {
+      res.push(null)
+    }
+    i++
+  }
+  return res
+}
