@@ -88,7 +88,7 @@ export default {
     tabClick (item, index) {
       this.currentIndex = index
     },
-    handleType () {
+    searchData () {
       switch (this.name) {
         case 'waterDetail':
           this.yTitleText = '水位（m）'
@@ -100,19 +100,6 @@ export default {
           break
         case 'windDetail':
           this.yTitleText = '风速（m）'
-          this.getDseStFqRList()
-          break
-      }
-    },
-    searchData () {
-      switch (this.name) {
-        case 'waterDetail':
-          this.getRiveDetailData()
-          break
-        case 'rainDetail':
-          this.getPptnDetailData()
-          break
-        case 'windDetail':
           this.getDseStFqRList()
           break
       }
@@ -146,6 +133,7 @@ export default {
               //   time: this.endDate.replace('T', ' '),
               //   value: null
               // })
+              console.log(JSON.stringify(convertedRes, null, 2))
               this.data = convertedRes
             } else {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
@@ -219,7 +207,7 @@ export default {
     }
   },
   created () {
-    this.handleType()
+    this.searchData()
   }
 }
 </script>
