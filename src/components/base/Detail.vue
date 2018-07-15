@@ -22,14 +22,14 @@
       <hui-tab1 :data="tabData" size="small" @tab-click="tabClick" v-show="tableData.length"></hui-tab1>
       <div class="chart-wrap" v-if="currentIndex === 0 && tableData.length">
         <highcharts-line
-          v-if="name==='waterDetail' || name==='windDetail'"
+          v-if="name==='waterDetail'"
           :data="chartData"
           :pointStart="this.beginDate"
           :title="title"
         >
         </highcharts-line>
         <highcharts-column
-          v-if="name==='rainDetail'"
+          v-if="name==='rainDetail' || name==='windDetail'"
           :data="chartData"
           :pointStart="this.beginDate"
           :title="title"
@@ -129,7 +129,7 @@ export default {
               })
               this.tableData = convertedRes
               this.chartData = padRes
-            } else {
+            } else if (data) {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
@@ -164,7 +164,7 @@ export default {
               })
               this.tableData = convertedRes
               this.chartData = padRes
-            } else {
+            } else if (data) {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
@@ -199,7 +199,7 @@ export default {
               })
               this.tableData = convertedRes
               this.chartData = padRes
-            } else {
+            } else if (data) {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {

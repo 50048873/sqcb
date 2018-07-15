@@ -4,7 +4,7 @@
 
 <script>
 import Highcharts from 'highcharts/highstock'
-import {chart} from '@/assets/js/mixin'
+import {chart, getStrDate} from '@/assets/js/mixin'
 
 export default {
   name: 'HighchartsColumn',
@@ -23,9 +23,10 @@ export default {
       required: true
     }
   },
-  mixins: [chart],
+  mixins: [chart, getStrDate],
   methods: {
     draw () {
+      var _this = this
       let options = {
         title: {
           text: this.title,
@@ -40,13 +41,7 @@ export default {
             rotation: -70,
             x: 10,
             formatter: function () {
-              let date = new Date(this.value)
-              let y = date.getFullYear()
-              let m = (date.getMonth() + 1).toString().padStart(2, '0')
-              let d = date.getDate().toString().padStart(2, '0')
-              let hour = date.getHours().toString().padStart(2, '0')
-              let minute = date.getMinutes().toString().padStart(2, '0')
-              return `${y}-${m}-${d} ${hour}:${minute}`
+              return _this.getStrDate(this.value)
             }
           },
           tickPixelInterval: 50
@@ -60,12 +55,16 @@ export default {
           }
         },
         tooltip: {
-          headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-          pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-          '<td style="padding:0"><b>{point.y:.2f}</b></td></tr>',
-          footerFormat: '</table>',
           shared: true,
-          useHTML: true
+          useHTML: true,
+          formatter: function () {
+            let date = _this.getStrDate(this.x)
+            let content = '<p style="font-size: 10px;">时间：' + date + '</p>'
+            for (let i = 0; i < this.points.length; i++) {
+              content += '<p style="color: ' + this.points[i].series.color + '">' + this.points[i].series.name + ': ' + this.points[i].y.toFixed(2) + '</p>'
+            }
+            return content
+          }
         },
         legend: {
           enabled: false

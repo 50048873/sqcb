@@ -27,9 +27,10 @@ export default {
       api.getAllWarnList()
         .then((res) => {
           if (res.status === success) {
-            if (Array.isArray(res.data) && res.data.length) {
-              this.data = res.data[0]
-            } else {
+            let data = res.data
+            if (Array.isArray(data) && data.length) {
+              this.data = data[0]
+            } else if (data) {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {

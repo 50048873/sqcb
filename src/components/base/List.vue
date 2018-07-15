@@ -8,8 +8,7 @@
     <hui-dialog
       :title="dialog.title"
       :visible.sync="dialog.visible"
-      width="80%"
-      cancel="关闭">
+      width="80%">
       <p v-for="(value, key) in dialog.data" :key="key">{{value}}</p>
     </hui-dialog>
   </div>
@@ -49,23 +48,25 @@ export default {
       this.$router.push({path: `${parentPath}/${item.stcd}`, query: {title: item.title}})
     },
     warnClick (item, index) {
-      api.getAllWarnListByStcd({stcd: item.stcd})
-        .then((res) => {
-          if (res.status === success) {
-            let data = res.data
-            if (isObject(data)) {
-              this.dialog.visible = true
-              this.dialog.title = item.title
-              this.dialog.data = data
+      if (this.isRain) {
+        api.getAllWarnListByStcd({stcd: item.stcd})
+          .then((res) => {
+            if (res.status === success) {
+              let data = res.data
+              if (isObject(data)) {
+                this.dialog.visible = true
+                this.dialog.title = item.title
+                this.dialog.data = data
+              } else if (data) {
+                this.$message({content: noDataHintTxt, icon: 'hui-warn'})
+              }
             } else {
-              this.$message({content: noDataHintTxt, icon: 'hui-warn'})
+              this.$message({content: res.msg, icon: 'hui-warn'})
             }
-          } else {
-            this.$message({content: res.msg, icon: 'hui-warn'})
-          }
-        }, (err) => {
-          this.$message({content: getServerErrorMessageAsHtml(err, 'List.vue->getAllWarnListByStcd'), icon: 'hui-warn'})
-        })
+          }, (err) => {
+            this.$message({content: getServerErrorMessageAsHtml(err, 'List.vue->getAllWarnListByStcd'), icon: 'hui-warn'})
+          })
+      }
     },
     ballClick (iconClass) {
       const parentPath = this.$route.path
@@ -73,7 +74,7 @@ export default {
       this.$router.push(`${parentPath}/${name}Condition`)
     },
     handleFloatBallStatus () {
-      const name = this.$route.name.toLowerCase()
+      const name = this.$route.name
       switch (name) {
         case 'water':
           this.showFloatBall = false
@@ -99,7 +100,7 @@ export default {
             let data = res.data
             if (Array.isArray(data)) {
               this.data = this.convertRiverRealList(data)
-            } else {
+            } else if (data) {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
@@ -116,7 +117,7 @@ export default {
             let data = res.data
             if (Array.isArray(data)) {
               this.data = this.convertPptnRealList(data)
-            } else {
+            } else if (data) {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
@@ -133,7 +134,7 @@ export default {
             let data = res.data
             if (Array.isArray(data)) {
               this.data = this.convertFqList(data)
-            } else {
+            } else if (data) {
               this.$message({content: noDataHintTxt, icon: 'hui-warn'})
             }
           } else {
